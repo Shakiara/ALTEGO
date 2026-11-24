@@ -121,5 +121,3 @@ npm run console
 ## Autora
 
 Shakiara Feliciano Navarro
-
-Proyecto individual — COMP 2053 (Full-Stack).

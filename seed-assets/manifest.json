@@ -1,0 +1,514 @@
+{
+  "format": 1,
+  "description": "Recursos académicos originales de la creadora; no contienen datos de la instalación principal.",
+  "products": [
+    {
+      "id": 1,
+      "name": "Hair 1",
+      "price": 0,
+      "description": "Academic sample accessory by Shakiara.",
+      "files": [
+        {
+          "path": "seed-assets/hair-1/black-png.png",
+          "kind": "png",
+          "sha256": "226cc5d7b6377d944b4f97da7b0cca1d1b9b49063ff7e9876236cb9069211389",
+          "bytes": 209100,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "448eb6bc-4681-4363-a83e-daff5c218759"
+        },
+        {
+          "path": "seed-assets/hair-1/blonde-png.png",
+          "kind": "png",
+          "sha256": "3a9d3225d1cbab1082bd0a62cb49436db66a44f7fcab94b4726968949b8ea1db",
+          "bytes": 633366,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "43d4d287-6041-4030-adcf-58316f1691e5"
+        },
+        {
+          "path": "seed-assets/hair-1/blonde-l-png.png",
+          "kind": "png",
+          "sha256": "9c861688a415695ebb24d79a8ff3b08c40a33907f2b2c23fbe5e297925f50bde",
+          "bytes": 704173,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "4b94a715-9c70-4d86-a845-e2b286a59b1c"
+        },
+        {
+          "path": "seed-assets/hair-1/brown-gray-png.png",
+          "kind": "png",
+          "sha256": "071908c4b4dd034858b0f621a19f8ac1c2e9cca6f8488541bdb531b0f125c124",
+          "bytes": 539580,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "9dff52d4-7e4e-4f84-a239-5e9c12be7bca"
+        },
+        {
+          "path": "seed-assets/hair-1/brown-l-png.png",
+          "kind": "png",
+          "sha256": "c89106e2353ca2fbd3de921a17c4b6caedb8ae0fa6682b0f1ef80f45a8aebca0",
+          "bytes": 597357,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "c10bf070-bbcf-4944-a249-f36c6e952d84"
+        },
+        {
+          "path": "seed-assets/hair-1/cherry-png.png",
+          "kind": "png",
+          "sha256": "7bad587fa06cade67f8db4ca9e41f616ca9c893d7c365632c73cb6c2555cbf46",
+          "bytes": 426353,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "7ff95eac-7e18-43dc-a9b3-5e4fabbf790d"
+        },
+        {
+          "path": "seed-assets/hair-1/gray-png.png",
+          "kind": "png",
+          "sha256": "a248626bac3b5530e8fefb248932e2c609bfec1d5619b51ac7687566037a1079",
+          "bytes": 486184,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "6939b4f7-8f18-4c71-a5f8-8014e269aaf3"
+        },
+        {
+          "path": "seed-assets/hair-1/pink-png.png",
+          "kind": "png",
+          "sha256": "e31c0d2daf68f3c1010daabb4c1df6b4a34200bedfe3fda7ed8306674d7505e4",
+          "bytes": 588011,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "fc491038-a85f-4128-a5fd-73bd5c4d7984"
+        },
+        {
+          "path": "seed-assets/hair-1/red-png.png",
+          "kind": "png",
+          "sha256": "5117fc9dde2d17e60ab3f9772079ea24f2795a2542a228422cc1879a6d1877ab",
+          "bytes": 572201,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "405bd613-c64c-417a-a7f5-86de2c8703fe"
+        },
+        {
+          "path": "seed-assets/hair-1/teal-png.png",
+          "kind": "png",
+          "sha256": "c408e20b63e785bd1417dd1552452151dd0efd7d9803f3e2ce9f6be43b670083",
+          "bytes": 540217,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "647d5385-c3c2-47aa-a5e8-893eaee61de1"
+        },
+        {
+          "path": "seed-assets/hair-1/white-gray-png.png",
+          "kind": "png",
+          "sha256": "1f47661b9aadb4fbfc110331d7faa7a856c2e8fbfc73647bd95b00073493adb6",
+          "bytes": 424853,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "e7ca7629-87a7-4aaf-a260-7193156df9e3"
+        },
+        {
+          "path": "seed-assets/hair-1/white-png.png",
+          "kind": "png",
+          "sha256": "36a1c559ded5a101cee5390d0fe08f7eb49af5547bf9fbdeda0ac06f6881a1f5",
+          "bytes": 218241,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "d084fe9d-35c6-4bc0-ad8e-88ed976b95d9"
+        },
+        {
+          "path": "seed-assets/hair-1/model.glb",
+          "kind": "glb",
+          "sha256": "c24d8eea064e67e3d0558268a87b76163e67a5b48ae3c5e51fabe156b26f1e2b",
+          "bytes": 543132,
+          "metadata": {
+            "compatible": true,
+            "materials": 2
+          },
+          "assetId": "ab7d911c-73e7-4dfd-a57d-d58f66bc8ab5"
+        }
+      ],
+      "variants": [
+        {
+          "name": "Black Png",
+          "hex": "#171612",
+          "texture": "seed-assets/hair-1/black-png.png"
+        },
+        {
+          "name": "Blonde Png",
+          "hex": "#ddc9b6",
+          "texture": "seed-assets/hair-1/blonde-png.png"
+        },
+        {
+          "name": "Blonde L Png",
+          "hex": "#94816c",
+          "texture": "seed-assets/hair-1/blonde-l-png.png"
+        },
+        {
+          "name": "Brown Gray Png",
+          "hex": "#4d453c",
+          "texture": "seed-assets/hair-1/brown-gray-png.png"
+        },
+        {
+          "name": "Brown L Png",
+          "hex": "#67493b",
+          "texture": "seed-assets/hair-1/brown-l-png.png"
+        },
+        {
+          "name": "Cherry Png",
+          "hex": "#3d2020",
+          "texture": "seed-assets/hair-1/cherry-png.png"
+        },
+        {
+          "name": "Gray Png",
+          "hex": "#5f5e5e",
+          "texture": "seed-assets/hair-1/gray-png.png"
+        },
+        {
+          "name": "Pink Png",
+          "hex": "#b3a2a3",
+          "texture": "seed-assets/hair-1/pink-png.png"
+        },
+        {
+          "name": "Red Png",
+          "hex": "#823837",
+          "texture": "seed-assets/hair-1/red-png.png"
+        },
+        {
+          "name": "Teal Png",
+          "hex": "#5f8d89",
+          "texture": "seed-assets/hair-1/teal-png.png"
+        },
+        {
+          "name": "White Gray Png",
+          "hex": "#a7a6a2",
+          "texture": "seed-assets/hair-1/white-gray-png.png"
+        },
+        {
+          "name": "White Png",
+          "hex": "#dcdbd7",
+          "texture": "seed-assets/hair-1/white-png.png"
+        }
+      ],
+      "modelAssetId": "ab7d911c-73e7-4dfd-a57d-d58f66bc8ab5"
+    },
+    {
+      "id": 2,
+      "name": "Hair 2",
+      "price": 2.99,
+      "description": "Academic sample accessory by Shakiara.",
+      "files": [
+        {
+          "path": "seed-assets/hair-2/black-rainbow-png.png",
+          "kind": "png",
+          "sha256": "5f322eda7f94a8175c8574d390cbc0a6eea3617a80937d94836b9f4310ac563d",
+          "bytes": 239760,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "67db1563-ead6-404e-ab5d-3513985521ed"
+        },
+        {
+          "path": "seed-assets/hair-2/black-whitegrayish-png.png",
+          "kind": "png",
+          "sha256": "068bdce694751c3cfb89410a6c6957b02e99f8ead2d80b9992ccacc4a158aca8",
+          "bytes": 143491,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "1590b74b-6fd3-4374-acad-71654b6a0f87"
+        },
+        {
+          "path": "seed-assets/hair-2/blonde-white-png.png",
+          "kind": "png",
+          "sha256": "5ffda471ffbf27971f7abc83a857b236dc220eff1a8d3676e5c70fffaa16b585",
+          "bytes": 191257,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "3f90bc8f-9cdc-4b93-af2c-0af35eeb78ac"
+        },
+        {
+          "path": "seed-assets/hair-2/blondel-blonde-png.png",
+          "kind": "png",
+          "sha256": "3c60801e6f23ed567efb81769091dc059923bd6bedb719ead6107eee41ccfad8",
+          "bytes": 259572,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "75467f52-31b2-4f36-aeaa-3a9f746e387e"
+        },
+        {
+          "path": "seed-assets/hair-2/blue-teal-png.png",
+          "kind": "png",
+          "sha256": "4f03337ab04d5681eab151ff2c7f062f1ec90d22f42197130c0aff3e68ba0334",
+          "bytes": 247293,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "8ace6a69-d39a-4606-ad2b-936f77f40d9c"
+        },
+        {
+          "path": "seed-assets/hair-2/brown-blondel-png.png",
+          "kind": "png",
+          "sha256": "c363459c321eb5f96d7929e10f0e1ead7b7fd6434043edc1fb3bf6cfd9840e5a",
+          "bytes": 245797,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "b37767e5-6578-49fa-a676-d5ecc0d6c41c"
+        },
+        {
+          "path": "seed-assets/hair-2/brownl-red-png.png",
+          "kind": "png",
+          "sha256": "cccaa1ae222485bdc0b888388ed02269bfcec8a9bbe001d06151a08e34f67879",
+          "bytes": 237044,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "ac4d5e82-29ec-4af4-ade3-89903c5f2140"
+        },
+        {
+          "path": "seed-assets/hair-2/cherry-red-png.png",
+          "kind": "png",
+          "sha256": "4677dc984065853d8630cf8bca413185888e4f41a20866a070dfcecf551be94b",
+          "bytes": 210085,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "08257f42-c486-4ed3-a73a-76d8a135cce3"
+        },
+        {
+          "path": "seed-assets/hair-2/ginger-brownl-png.png",
+          "kind": "png",
+          "sha256": "1e701c7c1ae336b107ceca5c29a219e4a61e611541a1cc4ff3aeba2a3f54dfd0",
+          "bytes": 274586,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "f4707c17-fc13-4b22-aa25-905f9b1456c3"
+        },
+        {
+          "path": "seed-assets/hair-2/gray-white-png.png",
+          "kind": "png",
+          "sha256": "f69e610383947f6362ba9056f15f84f9c8795a09911c397cc1243b898e8fd07f",
+          "bytes": 164611,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "e743d6f0-5d21-4d3c-a5ca-ccc73e1bbdf0"
+        },
+        {
+          "path": "seed-assets/hair-2/magenta-white-png.png",
+          "kind": "png",
+          "sha256": "4275b4130baf2ee2dcf9f56d8b74a5c59e60f41c31580b710bb5d5f28039002f",
+          "bytes": 176852,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "f55e0cf7-ae1f-48a7-a47d-95ffa7f3438f"
+        },
+        {
+          "path": "seed-assets/hair-2/pink-white-png.png",
+          "kind": "png",
+          "sha256": "74a1b0b40938b20def9311e5454cb45d2c74151c7395d585631577406fd6ff2d",
+          "bytes": 189440,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "cb21f56f-67bd-4fc4-a577-a7bd2ad39c41"
+        },
+        {
+          "path": "seed-assets/hair-2/rainbow-ginger-png.png",
+          "kind": "png",
+          "sha256": "de3e518c6dccb52e7d57a58955ac743396c1728beb6a1333a87b1a2af250dda1",
+          "bytes": 339539,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "10ee1201-23b0-4b02-a2c1-bdaaec30b305"
+        },
+        {
+          "path": "seed-assets/hair-2/red-whitegray-png.png",
+          "kind": "png",
+          "sha256": "0b039fb95155a8b6a0ad28c8bf4f55b753f8af8c171a5e7394cde7034f41f282",
+          "bytes": 211454,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "a72be068-627e-4909-a7d9-3478c93bf8eb"
+        },
+        {
+          "path": "seed-assets/hair-2/teal-white-png.png",
+          "kind": "png",
+          "sha256": "f86b74b1ff01d4b257c7bf0ad6f9bf8c8e69572926a53e22c375f4b00ccda271",
+          "bytes": 175348,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "f18fd00e-3293-49af-a2a3-6525a758b9ee"
+        },
+        {
+          "path": "seed-assets/hair-2/white-whitegray-png.png",
+          "kind": "png",
+          "sha256": "6577357b90166d61a235a162c763f171f4683de08971b41947ba446def779a14",
+          "bytes": 134011,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "da47faab-5947-4c50-ad2e-eca6c61f1660"
+        },
+        {
+          "path": "seed-assets/hair-2/whitegray-white-png.png",
+          "kind": "png",
+          "sha256": "f6f53c65abe2717b6c008690ac0d2d03970adb049c9071d52f5d7a2b666bab09",
+          "bytes": 142744,
+          "metadata": {
+            "width": 1024,
+            "height": 1024
+          },
+          "assetId": "1160826f-8b5c-43b4-a9f3-1a0ee753a994"
+        },
+        {
+          "path": "seed-assets/hair-2/model.glb",
+          "kind": "glb",
+          "sha256": "cd8329b41387d39d90d0e2aff306054f2d2c2d294483a052cb589e8b1909d646",
+          "bytes": 352640,
+          "metadata": {
+            "compatible": true,
+            "materials": 1
+          },
+          "assetId": "23af5c9b-1ae3-47c4-a827-e4c8f17b242d"
+        }
+      ],
+      "variants": [
+        {
+          "name": "Black Rainbow Png",
+          "hex": "#1a1917",
+          "texture": "seed-assets/hair-2/black-rainbow-png.png"
+        },
+        {
+          "name": "Black Whitegrayish Png",
+          "hex": "#191919",
+          "texture": "seed-assets/hair-2/black-whitegrayish-png.png"
+        },
+        {
+          "name": "Blonde White Png",
+          "hex": "#3a3835",
+          "texture": "seed-assets/hair-2/blonde-white-png.png"
+        },
+        {
+          "name": "Blondel Blonde Png",
+          "hex": "#2f2a26",
+          "texture": "seed-assets/hair-2/blondel-blonde-png.png"
+        },
+        {
+          "name": "Blue Teal Png",
+          "hex": "#101820",
+          "texture": "seed-assets/hair-2/blue-teal-png.png"
+        },
+        {
+          "name": "Brown Blondel Png",
+          "hex": "#1b1916",
+          "texture": "seed-assets/hair-2/brown-blondel-png.png"
+        },
+        {
+          "name": "Brownl Red Png",
+          "hex": "#1d100f",
+          "texture": "seed-assets/hair-2/brownl-red-png.png"
+        },
+        {
+          "name": "Cherry Red Png",
+          "hex": "#170a0b",
+          "texture": "seed-assets/hair-2/cherry-red-png.png"
+        },
+        {
+          "name": "Ginger Brownl Png",
+          "hex": "#24160f",
+          "texture": "seed-assets/hair-2/ginger-brownl-png.png"
+        },
+        {
+          "name": "Gray White Png",
+          "hex": "#272728",
+          "texture": "seed-assets/hair-2/gray-white-png.png"
+        },
+        {
+          "name": "Magenta White Png",
+          "hex": "#3d2b3b",
+          "texture": "seed-assets/hair-2/magenta-white-png.png"
+        },
+        {
+          "name": "Pink White Png",
+          "hex": "#343232",
+          "texture": "seed-assets/hair-2/pink-white-png.png"
+        },
+        {
+          "name": "Rainbow Ginger Png",
+          "hex": "#2e241c",
+          "texture": "seed-assets/hair-2/rainbow-ginger-png.png"
+        },
+        {
+          "name": "Red Whitegray Png",
+          "hex": "#261b1b",
+          "texture": "seed-assets/hair-2/red-whitegray-png.png"
+        },
+        {
+          "name": "Teal White Png",
+          "hex": "#272e2e",
+          "texture": "seed-assets/hair-2/teal-white-png.png"
+        },
+        {
+          "name": "White Whitegray Png",
+          "hex": "#343434",
+          "texture": "seed-assets/hair-2/white-whitegray-png.png"
+        },
+        {
+          "name": "Whitegray White Png",
+          "hex": "#323232",
+          "texture": "seed-assets/hair-2/whitegray-white-png.png"
+        }
+      ],
+      "modelAssetId": "23af5c9b-1ae3-47c4-a827-e4c8f17b242d"
+    }
+  ]
+}

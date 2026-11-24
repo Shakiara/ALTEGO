@@ -1,0 +1,11 @@
+/* ALTEGO necesita una presentación coherente para la composición de las hojas de estilo globales. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+@import './styles/tokens.css';
+@import './styles/layout.css';
+@import './styles/surfaces.css';
+
+@import './styles/interactions.css';
+
+@import './styles/review-refinements.css';
+
+@import './styles/history-controls.css';

@@ -1,0 +1,52 @@
+// ALTEGO necesita resolver la entrada compartida de las consolas gráfica y de texto.
+// Este módulo reúne las operaciones y estructuras que atienden esa responsabilidad.
+import {createInterface} from 'node:readline';
+import net from 'node:net';import path from 'node:path';import os from 'node:os';import {spawn} from 'node:child_process';import {fileURLToPath} from 'node:url';import {createHash,randomUUID} from 'node:crypto';
+import {DevelopmentSetup,validSetupMessage,compatibleNode} from './development-setup.mjs';
+import {routeInventory,routeUrl} from './development-routes.mjs';
+import {DevelopmentSupervisor,validAction} from './development-supervisor.mjs';
+const root=fileURLToPath(new URL('../../',import.meta.url));try{process.loadEnvFile(path.join(root,'.env'));}catch{}
+const port=(v,d)=>/^\d+$/.test(v||'')&&Number(v)>0&&Number(v)<=65535?Number(v):d;const api=port(process.env.PORT,3000),web=port(process.env.WEB_PORT,4200);const ports={api,web:web===api?4200:web};const consoleOnly=process.argv.includes('--console');
+const scope=process.env.ALTEGO_DEV_SESSION_SCOPE||'local';if(!/^[a-zA-Z0-9_-]{1,80}$/.test(scope))throw Error('Invalid development session scope.');
+export const pipeName='altego-dev-'+createHash('sha256').update(path.resolve(root).toLowerCase()+':'+scope).digest('hex').slice(0,24);
+const endpoint=process.platform==='win32'?'\\\\.\\pipe\\'+pipeName:path.join(os.tmpdir(),pipeName+'.sock'),token=randomUUID()+randomUUID(),runId=randomUUID();
+let terminal,supervisor,setup,routeData={items:[],duplicates:[],generatedAt:null},routeMessage='Install dependencies to inspect routes.',gui,viewer,closing=false,closePromise,tick,launchTimer,rawBefore=process.stdin.isRaw,lastId=0,lastState='',lastSent=0;const clients=new Set();
+const server=net.createServer(socket=>{clients.add(socket);let pending='',authenticated=false;socket.setTimeout(15000);socket.on('timeout',()=>socket.destroy());socket.on('error',()=>{});socket.on('close',()=>{clients.delete(socket);if(socket===viewer){viewer=null;if(!closing)void close(1,'Desktop connection was lost.');}});
+ socket.setEncoding('utf8');socket.on('data',chunk=>{pending+=chunk;if(pending.length>20000){socket.destroy();return;}let index;while((index=pending.indexOf('\n'))>=0){const line=pending.slice(0,index);pending=pending.slice(index+1);let message;try{message=JSON.parse(line);}catch{socket.destroy();return;}
+  if(!authenticated){if(message.type==='focus'&&Object.keys(message).length===1){viewer?.write('{"type":"focus"}\n');socket.end('{"type":"existing"}\n');return;}if(message.type!=='attach'||message.token!==token||viewer){socket.destroy();return;}authenticated=true;socket.setTimeout(0);viewer=socket;clearTimeout(launchTimer);lastId=0;lastState='';supervisor?.log('Console','Desktop connected.');send();continue;}
+  if(validAction(message)){if(message.action==='shutdown')void close(0);else void control(message.action);}
+  else if(validSetupMessage(message))void setup.run(message).then(()=>refreshRoutes()).catch(e=>supervisor.log('Console',e.message,'Error'));
+  else if(message.type==='routes'&&Object.keys(message).length===1)void refreshRoutes();
+  else if(message.type==='navigate'&&Object.keys(message).every(k=>['type','id','parameters'].includes(k))){try{const route=routeData.items.find(r=>r.id===message.id);const url=routeUrl(route,message.parameters,ports);viewer.write(JSON.stringify({type:'open',url})+'\n');}catch(e){supervisor.log('Console',e.message,'Warning');}}
+  else{socket.destroy();return;}
+ }});
+});
+async function refreshRoutes(){if(!setup.dependencies){routeMessage='Install project dependencies before building the route inventory.';return;}try{routeData=await routeInventory(root);routeMessage=routeData.items.length+' routes · '+routeData.duplicates.length+' duplicate registrations';}catch{routeMessage='Route inventory could not be verified. Check project dependencies and route definitions.';}send();}
+async function control(action){if(setup.busy){supervisor.log('Console','Wait for the installation step to finish.','Warning');return;}if(action==='stop')return supervisor.action(action);try{await setup.verify();if(supervisor.operation)throw Error('Another server operation is in progress.');const config=setup.config;if(supervisor.sql&&JSON.stringify(config)!==JSON.stringify(supervisor.config)){clearInterval(supervisor.probeTimer);await Promise.allSettled([supervisor.sql.end(),supervisor.mongo.close()]);supervisor.sql=null;}supervisor.config=config;supervisor.environment=setup.env;ports.api=config.port;ports.web=Number(setup.env.WEB_PORT||4200);if(ports.api===ports.web)throw Error('API and frontend ports must differ.');if(!supervisor.sql)await supervisor.connect();return supervisor.action(action);}catch(e){setup.ready=false;setup.needsSetup=true;setup.revision++;supervisor.log('Console','Cannot start: '+e.message,'Error');}}
+async function acquire(){try{await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(endpoint,resolve);});return true;}catch(error){if(error.code!=='EADDRINUSE')throw error;await new Promise(resolve=>{const socket=net.createConnection(endpoint);socket.setTimeout(2000);socket.once('connect',()=>socket.write('{"type":"focus"}\n'));socket.once('data',()=>socket.end());socket.once('error',resolve);socket.once('timeout',()=>{socket.destroy();resolve();});socket.once('close',resolve);});process.stdout.write('[DEV] ALTEGO is already running. The existing window was requested to focus. No servers were started.\n');return false;}}
+function send(){if(!viewer||viewer.destroyed||!supervisor)return;const packet={...supervisor.snapshot(lastId),busy:!!supervisor.operation||!!setup?.busy,setup:setup?.snapshot(),routes:routeData.items,routeRevision:routeData.generatedAt,routeMessage},state=JSON.stringify({...packet,logs:[],lastId:0});if(state===lastState&&!packet.logs.length&&Date.now()-lastSent<3000)return;if(viewer.writableLength>4_000_000){void close(1,'Desktop stopped receiving updates.');return;}viewer.write(JSON.stringify(packet)+'\n');lastId=packet.lastId;lastState=state;lastSent=Date.now();}
+async function close(code=0,reason){if(closePromise)return closePromise;closing=true;closePromise=(async()=>{clearInterval(tick);clearTimeout(launchTimer);if(reason)supervisor?.log('Console',reason,'Error');try{if(setup?.job)await setup.job.catch(()=>{});await supervisor?.close();}catch(e){code=1;process.stderr.write('[DEV] Shutdown error: '+e.message+'\n');}send();viewer?.write('{"type":"closed"}\n');if(gui&&gui.exitCode===null){await Promise.race([new Promise(r=>gui.once('exit',r)),new Promise(r=>setTimeout(r,4500))]);if(gui.exitCode===null)await supervisor.owner.stop({child:gui,source:'Desktop',descendants:[],created:gui.created});}
+ terminal?.close();for(const client of clients)client.destroy();await new Promise(r=>server.close(r));if(process.stdin.isTTY){process.stdin.setRawMode(!!rawBefore);process.stdin.pause();}process.stdout.write(code?'[DEV] ALTEGO session closed with errors.\n':'[DEV] ALTEGO stopped. All owned services and the desktop window have closed.\n');if(process.connected)process.disconnect();process.exitCode=code;})();return closePromise;}
+if(!compatibleNode(process.versions.node))throw Error('Install Node.js ^22.22.3, ^24.15.0 or >=26 with npm before opening ALTEGO Dev Console.');
+if(await acquire()){
+ try{if(process.platform!=='win32')throw Error('ALTEGO Dev Console requires Windows WPF. The public Angular build remains portable.');
+  supervisor=new DevelopmentSupervisor(root,{mysql:{password:''},mongo:{}},ports,runId,()=>{});setup=new DevelopmentSetup(root,supervisor);
+  process.once('SIGINT',()=>void close());process.once('SIGTERM',()=>void close());process.on('uncaughtException',e=>void close(1,e.message));process.on('unhandledRejection',e=>void close(1,e?.message||String(e)));
+  if(process.stdin.isTTY&&!consoleOnly){process.stdin.setRawMode(true);process.stdin.resume();process.stdin.on('data',buffer=>{if(buffer.includes(3))void close();});}
+
+  process.on('message',message=>{if(process.send&&message?.type==='altego.console.inspect'){process.send({type:'altego.console.snapshot',phase:supervisor.phase,setup:setup.snapshot(),routes:routeData,routeMessage,services:supervisor.services});return;}if(process.send&&message?.type==='altego.console.stop')void close();else if(process.send&&message?.type==='altego.console.action'&&['start','stop','restart'].includes(message.action))void control(message.action);});
+  if(closing)throw Error('Session closed during startup.');
+  if(consoleOnly){
+   process.stdout.write('[DEV] Commands: start, stop, restart, status, quit.\n');
+   terminal=createInterface({input:process.stdin,output:process.stdout,terminal:!!process.stdin.isTTY});
+   terminal.on('line',line=>{const command=line.trim().toLowerCase();if(command==='quit'||command==='exit')void close();else if(['start','stop','restart'].includes(command))void control(command);else if(command==='status')process.stdout.write(JSON.stringify(supervisor.snapshot())+'\n');else if(command)process.stdout.write('[DEV] Use start, stop, restart, status or quit.\n');});
+  }else{
+  const {desktopExecutable}=await import('./development-desktop.mjs');const executable=await desktopExecutable(root);
+  gui=spawn(executable,[],{cwd:root,windowsHide:true,env:{...process.env,ALTEGO_DEV_PIPE:pipeName,ALTEGO_DEV_TOKEN:token,ALTEGO_DEV_VIEW:path.join(root,'scripts/console/desktop/Desktop.xaml'),ALTEGO_DEV_ICON:path.join(root,'scripts/console/desktop/altego.ico')},stdio:['ignore','pipe','pipe']});
+  for(const stream of [gui.stdout,gui.stderr])stream.on('data',data=>supervisor.log('Console',String(data).trim(),'Error'));
+  gui.once('error',error=>void close(1,'Could not open desktop: '+error.message));gui.once('exit',code=>{if(!closing)void close(1,'Desktop exited unexpectedly ('+code+').');});
+  supervisor.log('Console','ALTEGO Dev Console is opening. Terminal logs remain available.');tick=setInterval(send,400);launchTimer=setTimeout(()=>void close(1,'Desktop did not connect. Check Windows .NET Framework and WPF availability.'),25000);
+  }
+  await setup.inspect();try{await setup.verify();}catch{setup.message='Installation needs attention. Open Setup & Installation.';}setup.initialChecked=true;setup.revision++;await refreshRoutes();if(!consoleOnly&&setup.ready&&!closing)await control('start');
+ }catch(error){process.stderr.write('[DEV] '+error.message+'\n');await close(1);}
+}

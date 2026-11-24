@@ -1,0 +1,17 @@
+/* ALTEGO necesita una presentación coherente para el espacio de trabajo de los creadores. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+:host{--workspace-surface:#fff8}.creator-workspace{background:linear-gradient(125deg,#fff6f780,#f5f2fc99 70%,#edf7f680)}.workspace-brand{margin-bottom:28px}.brand-emblem{background:linear-gradient(135deg,#f2e3ef,#e8e6f5)}.workspace-header{background:#fcf9fbe8}nav summary{letter-spacing:1.1px}.workspace-main{max-width:none;width:100%;box-sizing:border-box}
+
+.studio-header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}@media(max-width:520px){.studio-header-actions{gap:4px}}
+
+@media(max-width:520px){.workspace-header{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.workspace-heading h1{overflow-wrap:normal}.studio-header-actions{justify-self:end}}
+
+
+:host{--studio-scale:1;--studio-type-scale:1}
+@media(min-width:1800px){:host{--studio-scale:1.04;--studio-type-scale:1.12}}
+@media(min-width:2400px){:host{--studio-scale:1.1;--studio-type-scale:1.3}}
+@media(min-width:3000px){:host{--studio-scale:1.15;--studio-type-scale:1.4}}
+@media(min-width:3600px){:host{--studio-scale:1.2;--studio-type-scale:1.5}}
+@media(min-width:1800px){.workspace{grid-template-columns:calc(252px * var(--studio-scale)) minmax(0,1fr)}.workspace-sidebar.glass-panel{padding:calc(28px * var(--studio-scale)) calc(20px * var(--studio-scale));}.workspace-brand{gap:calc(12px * var(--studio-scale));margin-bottom:calc(30px * var(--studio-scale))}.workspace-brand strong{font-size:calc(25px * var(--studio-type-scale))}.workspace-brand small{font-size:calc(10px * var(--studio-type-scale))}.brand-emblem{width:calc(42px * var(--studio-scale));height:calc(46px * var(--studio-scale))}.brand-emblem app-icon{width:calc(22px * var(--studio-scale));height:calc(22px * var(--studio-scale))}nav summary{font-size:calc(10px * var(--studio-type-scale));padding:calc(9px * var(--studio-scale))}nav a{font-size:calc(13px * var(--studio-type-scale));padding:calc(12px * var(--studio-scale));gap:calc(12px * var(--studio-scale))}nav a app-icon{width:calc(17px * var(--studio-scale));height:calc(17px * var(--studio-scale))}nav details{margin-bottom:calc(18px * var(--studio-scale))}.workspace-header{padding:calc(24px * var(--studio-scale)) calc(34px * var(--studio-scale))}.workspace-header h1{font-size:calc(26px * var(--studio-type-scale))}.workspace-context{font-size:calc(10px * var(--studio-type-scale))}.workspace-main{padding:calc(28px * var(--studio-scale)) calc(34px * var(--studio-scale))}.workspace-header .back-store{font-size:calc(12px * var(--studio-type-scale));padding:calc(11px * var(--studio-scale)) calc(15px * var(--studio-scale))}.back-store app-icon{width:calc(15px * var(--studio-scale));height:calc(15px * var(--studio-scale))}.workspace-identity strong{font-size:calc(12px * var(--studio-type-scale))}.workspace-identity span:not(.user-monogram){font-size:calc(11px * var(--studio-type-scale))}.user-monogram{width:calc(36px * var(--studio-scale));height:calc(36px * var(--studio-scale));font-size:calc(14px * var(--studio-type-scale))}}
+
+.workspace-main{max-width:3200px;margin-inline:auto}

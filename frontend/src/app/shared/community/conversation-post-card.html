@@ -1,0 +1,102 @@
+<!-- ALTEGO necesita mostrar la presentación de publicaciones y sus acciones. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+<article appGlass class="post" [class.post-pinned]="post().pinned" [class.post-feed-card]="!detail()"
+  (click)="openFromSurface($event)">
+  <header class="post-header">
+    <a class="post-avatar" [routerLink]="['/creators', post().author.id]"
+      [attr.aria-label]="'View ' + post().author.display_name + ' profile'">
+      <app-live-avatar [userId]="post().author.id" [src]="post().author.avatar_url" [label]="post().author.display_name"/>
+    </a>
+    <div class="author-details">
+      <a class="author-name" [routerLink]="['/creators', post().author.id]">
+        <strong>{{post().author.display_name}} <app-account-badges [creatorId]="post().author.id" [verified]="post().author.verified_creator ?? false"/></strong><span>{{'@' + post().author.username}}</span>
+      </a>
+      <div class="metadata">
+        <button type="button" class="text-button date-toggle" [title]="post().created_at | date:'full'"
+          [attr.aria-expanded]="showDate()" (click)="showDate.set(!showDate())">
+          <time [attr.datetime]="post().created_at">{{relativeDate() ?? (post().created_at | date:'mediumDate')}}</time>
+        </button>
+        @if (showDate()) {
+          <span class="exact-date">({{post().created_at | date:'MMM d, y · h:mm a'}})</span>
+        }
+        @if (post().edited_at; as edited) {
+          <span class="edited-label" [title]="edited | date:'full'">Edited</span>
+        }
+      </div>
+    </div>
+    <div class="author-controls">
+      @if (post().pinned) {<span class="pin-label"><app-icon name="pin-solid"/> Pinned</span>}
+      @if (owner() || admin()) {
+        <div class="post-menu-anchor">
+          <button #menuTrigger appButton type="button" class="icon-control post-menu-toggle"
+            [attr.aria-controls]="menuId()" [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()"
+            aria-label="Post actions" title="Post actions" [disabled]="busy()"><app-icon name="more"/></button>
+          <div #menu class="post-menu" [hidden]="!menuOpen()" [id]="menuId()" role="group" aria-label="Post actions">
+            @if (owner() && !post().poll?.locked) {
+              <button appButton type="button" class="icon-control" aria-label="Edit" title="Edit"
+                [disabled]="busy()" (click)="runMenuAction('edit')"><app-icon name="edit"/></button>
+            }
+            @if(mayReport()){
+              <button appButton type="button" class="icon-control" aria-label="Report" title="Report"
+                [disabled]="busy()" (click)="runMenuAction('report')"><app-icon name="flag"/></button>
+            }
+            @if(owner()){
+            <button appButton type="button" class="icon-control delete-post" aria-label="Delete" title="Delete"
+              [disabled]="busy()" (click)="runMenuAction('delete')"><app-icon name="trash"/></button>}
+          </div>
+        </div>
+      }
+    </div>
+  </header>
+
+  <div class="post-content">
+    @if (detail()) {
+      <h2>{{post().title}}</h2>
+    } @else {
+      <h3><button type="button" class="text-button title" (click)="action.emit('open')">{{post().title}}</button></h3>
+    }
+    @if (post().description) {
+      <div class="description">
+        <p #descriptionText [class.collapsed]="!expanded()">{{post().description}}</p>
+        @if (longDescription()) {
+          <button type="button" class="text-button description-toggle" [attr.aria-expanded]="expanded()"
+            (click)="expanded.set(!expanded())">{{expanded() ? 'Show less' : 'Read more'}}</button>
+        }
+      </div>
+    }
+  </div>
+
+  @if (previewImages().length) {
+    <div class="post-media" [attr.data-count]="previewImages().length">
+      @for (photo of previewImages(); track $index; let i = $index) {
+        <button #tile type="button" class="image-button"
+          [attr.aria-label]="'View image ' + (i + 1) + ' of ' + post().images.length"
+          (click)="image.emit({index:i, trigger:tile})">
+          <img [src]="photo.url" alt="" loading="lazy" draggable="false">
+          @if (i === 3 && post().images.length > 4) {
+            <span class="image-overlay" aria-hidden="true">+{{post().images.length - 4}}</span>
+          }
+        </button>
+      }
+    </div>
+  }
+  <ng-content select="[post-poll]"/>
+  <footer class="post-actions">
+    <ng-content select="[post-engagement]"/>
+    <div class="post-secondary-actions">
+      @if(owner()){
+        <button appButton type="button" class="icon-control post-pin" [attr.aria-label]="post().pinned ? 'Unpin' : 'Pin'"
+          [title]="post().pinned ? 'Unpin' : 'Pin'" [disabled]="busy()" (click)="action.emit('pin')">
+          <app-icon [name]="post().pinned ? 'pin-solid' : 'pin'"/>
+        </button>
+      }@else if(!admin() && mayReport()){
+        <button appButton type="button" class="icon-control post-report" aria-label="Report" title="Report"
+          [disabled]="busy()" (click)="action.emit('report')"><app-icon name="flag"/></button>
+      }
+    <button appButton type="button" class="icon-control copy-link" [class.copied]="copied()"
+      [attr.aria-label]="copied() ? 'Link copied' : 'Copy Link'" [title]="copied() ? 'Link copied' : 'Copy Link'"
+      (click)="action.emit('copy')"><app-icon [name]="copied() ? 'success' : 'link'"/></button>
+    </div>
+    <span class="sr-only" role="status">{{copied() ? 'Link copied.' : ''}}</span>
+  </footer>
+</article>

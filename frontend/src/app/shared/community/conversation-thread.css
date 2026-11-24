@@ -1,0 +1,33 @@
+/* ALTEGO necesita una presentación coherente para los comentarios y respuestas de una conversación. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+:host{display:block;min-width:0}
+.comment-thread{min-width:0;display:grid;gap:14px;padding:clamp(14px,3vw,22px);border:1px solid var(--conversation-border);
+  border-radius:16px;background:var(--conversation-card);color:var(--conversation-text);box-shadow:var(--conversation-shadow);
+  font-family:var(--font-body);overflow-wrap:anywhere;scroll-margin-top:16px}
+.thread-heading,.comment-heading{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+.thread-heading{justify-content:space-between}.thread-heading h2{margin:0;font:650 19px var(--font-body)}
+.thread-heading select{padding:4px 7px;font-size:13px;width:auto;max-width:100%}
+.comment-thread>p{margin:0;font-size:14px}
+.comment-group{min-width:0;border-top:1px solid var(--conversation-border);padding-top:10px}
+.comment-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:9px;padding:4px 0;scroll-margin-top:14px}
+.comment-main{min-width:0;position:relative}.comment-heading a,.comment-thread>a{color:var(--conversation-control)}
+.comment-heading time{font-size:12px;color:var(--color-muted)}
+.comment-time:is(:hover,:focus-visible)::after{content:attr(data-full-date);position:absolute;z-index:4;
+  inset-block-end:100%;inset-inline-start:0;width:max-content;max-width:min(220px,45vw);padding:5px 7px;
+  border:1px solid var(--conversation-border);border-radius:7px;color:var(--conversation-text);background:var(--conversation-surface)}.comment-heading a{text-decoration:none;font-size:14px}
+.comment-heading a:hover{text-decoration:underline}
+.comment-avatar{display:grid;place-items:center;width:35px;height:35px;border-radius:50%;background:var(--conversation-active);
+  color:var(--conversation-control);overflow:hidden;text-decoration:none;font-size:14px;font-weight:650}
+.comment-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-manage{margin-inline-start:auto;display:flex;gap:2px}
+.comment-manage button,.reply-button,.reply-context{cursor:pointer;background:transparent;border:0;border-radius:8px;
+  min-height:36px;padding:4px 6px;color:var(--conversation-control)}
+.comment-manage button[aria-label="Delete comment"]{color:var(--color-danger)}
+.comment-manage button:hover,.reply-button:hover,.reply-context:hover{background:var(--conversation-active)}
+.reply-context{text-align:start;font-size:12px;min-height:28px}
+.comment-replies{margin-inline-start:clamp(10px,4vw,41px);padding-inline-start:clamp(7px,2vw,16px);
+  border-inline-start:2px solid var(--conversation-border);display:grid;gap:5px}
+.more-replies{margin-inline-start:12px}
+.comment-highlight{background:var(--conversation-active);border-radius:8px}
+app-comment-composer{margin-block:4px}
+@media(max-width:480px){.comment-row{gap:6px}.comment-avatar{width:30px;height:30px}}

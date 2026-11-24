@@ -1,0 +1,23 @@
+/* ALTEGO necesita una presentación coherente para la iluminación ambiental decorativa. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+:host { position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; contain:strict; }
+.ambient-light { position:absolute; width:clamp(350px,51vw,780px); height:clamp(350px,65vh,700px); border-radius:50%; filter:blur(var(--ambient-blur)); will-change:transform,opacity; animation-timing-function:var(--ease-ambient); animation-iteration-count:infinite; }
+.ambient-light.rose { left:4%; top:12%; background:radial-gradient(ellipse,#ecacca8c 0%,#efbad466 25%,#f2c7dd22 52%,transparent 72%); animation-name:float-rose; animation-duration:32s; animation-delay:-9s; }
+.ambient-light.lavender { left:38%; top:8%; background:radial-gradient(ellipse,#b8a4e687 0%,#c6b8ec5c 29%,#d2c8ee20 54%,transparent 73%); animation-name:float-lavender; animation-duration:39s; animation-delay:-17s; }
+.ambient-light.blue { left:60%; top:36%; background:radial-gradient(ellipse,#9bc9ec80 0%,#b3d9f057 30%,#c8e5f320 53%,transparent 73%); animation-name:float-blue; animation-duration:35s; animation-delay:-5s; }
+.ambient-light.peach { left:18%; top:48%; background:radial-gradient(ellipse,#f4c39a82 0%,#f4d0b358 28%,#f5dfca20 52%,transparent 72%); animation-name:float-peach; animation-duration:44s; animation-delay:-23s; }
+.ambient-light.mint { left:-16%; top:52%; background:radial-gradient(ellipse,#a4dcca70 0%,#c1e5d84d 30%,#d1eadc1a 54%,transparent 73%); animation-name:float-mint; animation-duration:37s; animation-delay:-12s; }
+@keyframes float-rose { 0%,100%{transform:translate3d(-8vw,-5vh,0) scale(.95);opacity:.75} 33%{transform:translate3d(12vw,11vh,0) scale(1.12);opacity:.95} 68%{transform:translate3d(3vw,24vh,0) scale(1.02);opacity:.8} }
+@keyframes float-lavender { 0%,100%{transform:translate3d(8vw,3vh,0) scale(1.06);opacity:.85} 38%{transform:translate3d(-13vw,18vh,0) scale(.94);opacity:.7} 72%{transform:translate3d(-3vw,-9vh,0) scale(1.13);opacity:.93} }
+@keyframes float-blue { 0%,100%{transform:translate3d(5vw,9vh,0) scale(1);opacity:.8} 36%{transform:translate3d(-12vw,-15vh,0) scale(1.1);opacity:.94} 70%{transform:translate3d(-20vw,4vh,0) scale(.96);opacity:.72} }
+@keyframes float-peach { 0%,100%{transform:translate3d(-4vw,8vh,0) scale(1.08);opacity:.76} 30%{transform:translate3d(13vw,-18vh,0) scale(.96);opacity:.92} 66%{transform:translate3d(-10vw,-11vh,0) scale(1.12);opacity:.84} }
+@keyframes float-mint { 0%,100%{transform:translate3d(1vw,-6vh,0) scale(.96);opacity:.7} 40%{transform:translate3d(15vw,-21vh,0) scale(1.09);opacity:.9} 75%{transform:translate3d(7vw,9vh,0) scale(1.02);opacity:.8} }
+
+@media(max-width:760px) {
+  .ambient-light { width:420px; height:470px; filter:none; }
+  .ambient-light.rose { left:-36%; background:radial-gradient(ellipse,#ecacca80,#f4c39a3d 38%,transparent 72%); }
+  .ambient-light.lavender { left:20%; top:16%; }
+  .ambient-light.blue { left:5%; top:55%; background:radial-gradient(ellipse,#9bc9ec70,#a4dcca3d 38%,transparent 72%); }
+  .ambient-light.peach,.ambient-light.mint { display:none; }
+}
+@media(prefers-reduced-motion:reduce) { .ambient-light { animation:none; will-change:auto; opacity:.8; } }

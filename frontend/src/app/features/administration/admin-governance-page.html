@@ -1,0 +1,63 @@
+<!-- ALTEGO necesita mostrar las páginas administrativas de moderación y auditoría. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+<section appGlass class="governance-page">
+ <header class="section-heading"><h2>{{title}}</h2>@if(page();as list){<span class="count-label">{{list.total}} records</span>}</header>
+ @if(section==='products'){<nav class="queue-tabs" aria-label="Content queues"><button appButton type="button" [attr.aria-pressed]="queue==='products'" (click)="chooseQueue('products')">Products</button><button appButton type="button" [attr.aria-pressed]="queue==='cases'&&caseType==='product'" (click)="chooseQueue('cases')">Product Reports</button><button appButton type="button" [attr.aria-pressed]="queue==='cases'&&caseType==='review'" (click)="chooseQueue('reviews')">Review Reports</button></nav>}
+ <form class="governance-filters" (ngSubmit)="applyFilters()">
+  <label>Search<input appField name="search" [(ngModel)]="search" maxlength="200" placeholder="Search records…"></label>
+  <label>Status<select appField name="state" [(ngModel)]="state"><option value="">All statuses</option>@for(value of states;track value){<option [value]="value">{{value|titlecase}}</option>}</select></label>
+  <div class="filter-actions"><button appButton type="submit"><app-icon name="filter"/> Apply Filters</button>@if(section==='audit'&&auth.user()?.role==='admin'){<button appButton type="button" class="select-button" [attr.aria-pressed]="selecting" (click)="toggleAudit()"><app-icon name="success"/>{{selecting?'Cancel':'Select'}}</button>}</div>
+ </form>
+ @if(section==='audit'&&auth.user()?.role==='admin'){
+ <div class="audit-selection">
+ @if(selecting){<p>Explicit retention holds remain protected. Select up to 100 records.</p><button appButton type="button" (click)="selectVisible()">Select Page</button><span aria-live="polite">{{selectedIds.size}} selected</span>
+
+ <button appButton type="button" [disabled]="!selectedIds.size||busy()" (click)="deleteAudit()">Delete Permanently</button>}
+ </div>}
+ @if(loading()){<p role="status" class="section-state">Loading records…</p>}
+ @if(error()){<p class="notice error section-state" role="alert">{{error()}}</p><button appButton type="button" (click)="load()">Try Again</button>}
+ @else{
+  @if(currentSection==='cases'&&page()?.items?.length){
+   <details class="bulk-tools"><summary>Case selection</summary><div class="bulk-selection">
+    @for(row of page()!.items;track row.id){<label><input type="checkbox" [disabled]="row.state!=='pending'" [checked]="selectedIds.has(row.id)" (change)="toggle(row.id,$any($event.target).checked)"> {{row.title}} · @if(row.owner_id){<a [routerLink]="['/creators',row.owner_id]">{{'@'+row.owner}}</a>}@else{Unavailable account}</label>}
+   </div><div class="bulk-controls"><label>Action<select appField [(ngModel)]="bulkAction"><option value="assign">Assign to Me</option><option value="dismiss">Dismiss Reports</option></select></label><label>Reason<select appField [(ngModel)]="bulkReason"><option value="">Select a reason</option>@for(value of reasons;track value){<option [value]="value">{{value.replaceAll('_',' ')|titlecase}}</option>}</select></label><button appButton type="button" [disabled]="busy()||!selectedIds.size||!bulkReason" (click)="bulk()">Apply to Selected</button></div></details>
+  }
+  <app-workspace-table [selectionEnabled]="section==='audit'&&selecting" [selectionIds]="selectedIds" (selectionChanged)="toggle($event.id,$event.selected)" [itemLabel]="'records'" [tableLabel]="title" [actionLabel]="'View record'" [columns]="columns" [rows]="rows()" [loading]="loading()" [total]="page()?.total||0" [page]="page()?.page||1" [pages]="pages()" (selected)="open($event)" (changed)="load($event)"/>
+ }
+</section>
+<dialog #drawer appModal appAdminDialog #closer="adminDialog" [adminDirty]="dirty" [adminBusy]="isBusy" class="governance-drawer" aria-labelledby="governance-detail-title" (close)="closed()">
+ <header class="drawer-heading"><div><h2 id="governance-detail-title">{{drawerTitle()}}</h2>@if(detail();as item){<span class="state-pill">{{item.state|titlecase}}</span>}</div><button class="icon-control" type="button" autofocus aria-label="Close details" (click)="closer.requestClose()"><app-icon name="close"/></button></header>
+ @if(detailTabs().length>1){<nav class="drawer-tabs" aria-label="Record detail sections">@for(tab of detailTabs();track tab){<button appButton type="button" [attr.aria-pressed]="pane===tab" (click)="selectPane(tab)">{{tab|titlecase}}</button>}</nav>}
+ <div class="drawer-body"><div class="record-pane" role="region" tabindex="0" aria-label="Selected record section">
+  @if(detailLoading()){<p role="status">Loading details…</p>}
+  @if(detailError()){<p role="alert" class="notice error">{{detailError()}}</p>}
+  @if(detail();as item){
+
+   @if(section==='audit'){
+    <dl class="detail-fields audit-fields">@for(field of auditFields();track field.label){<div><dt>{{field.label}}</dt><dd>@if(field.user_id){<a [routerLink]="['/creators',field.user_id]">{{field.value}}</a>}@else{ {{field.value||'—'}} }</dd></div>}@if(auditDate();as date){<div><dt>Date</dt><dd>{{date|date:'medium'}}</dd></div>}</dl>
+    <section class="audit-change-section"><h3>Changes</h3>@for(change of auditChanges();track $index){<article class="audit-change"><h4>{{change.label}}</h4>@if(change.before!==undefined){<div class="change-comparison"><div><span>Before</span><p>{{change.before}}</p></div><span class="change-arrow" aria-hidden="true">→</span><div><span>After</span><p>{{change.after}}</p></div></div>}@else{<p>{{change.value}}</p>}</article>}@empty{<p class="audit-empty">No additional changes recorded.</p>}</section>
+    @if(auditOriginal();as original){<details class="audit-technical"><summary>Technical Data</summary><pre>{{original}}</pre></details>}
+   }@else{
+   <dl class="detail-fields" [hidden]="pane!=='details'">@for(field of item.fields;track field.label){<div><dt>{{field.label}}</dt><dd>@if(field.user_id){<a [routerLink]="['/creators',field.user_id]">{{field.value}}</a>}@else{ {{field.value||'—'}} }</dd></div>}</dl>
+   }
+   @if(pane==='preview'){
+    @if(modelSource();as source){<div class="moderation-model"><app-model [src]="source" [texture]="texture()" [detail]="true" [name]="item.title"/></div><app-admin-carousel label="Color Variants" [twoRows]="true" [items]="variantItems()" [selected]="selectedVariant" (chosen)="selectVariant($event)"/>}@else{<p>No model attached to this record.</p>}
+   }
+   @if(item.content;as content){<article class="reported-content" [hidden]="pane!=='details'">@if(content.title){<h4>{{content.title}}</h4>}<p>{{content.body}}</p>@for(image of content.images;track image){<img [src]="image" alt="Reported content image">}@if(content.poll;as poll){<ul>@for(option of poll.options;track $index){<li>{{option.label}} · {{option.votes}}</li>}</ul>}</article>}
+   @if(pane==='details'&&item.product_id){<a appButton routerLink="/admin/content" [queryParams]="{item:item.product_id}">Review Product</a>}
+   @if(pane==='details'&&item.owner_id&&section!=='audit'){<a appButton [routerLink]="['/admin/account-moderation']" [queryParams]="{account:item.owner_id}">Review Account</a>}
+   @if(pane==='reports'&&item.reports?.length){<h4>Individual Reports</h4><div class="history-list" tabindex="0" role="region" aria-label="Reports">@for(report of item.reports;track report.id){<article><strong>{{report.reason.replaceAll('_',' ')|titlecase}}</strong><p>@if(report.reporter_id){<a [routerLink]="['/creators',report.reporter_id]">{{report.reporter?'@'+report.reporter:'Private reporter'}}</a>}@else{ {{report.reporter?'@'+report.reporter:'Private reporter'}} } · {{report.created_at|date:'medium'}}</p>@if(report.explanation){<p>{{report.explanation}}</p>}</article>}</div>}
+   @if(pane==='history'&&item.history?.length){<h4>Decision History</h4><div class="history-list" tabindex="0" role="region" aria-label="Decision history">@for(entry of item.history;track $index){<article><strong>{{(entry.status||entry.action||'Decision').replaceAll('_',' ')|titlecase}}</strong><p>{{entry.created_at||entry.submitted_at|date:'medium'}}</p>@if(entry.reason||entry.decision_reason){<p>{{entry.reason||entry.decision_reason}}</p>}</article>}</div>}
+   @if(pane==='history'&&item.versions?.length){<button appButton type="button" (click)="selectVersion(null);selectPane('preview')">Review Draft</button><app-admin-carousel label="Published Versions" [items]="versionItems()" [selected]="selectedVersion" (chosen)="selectVersion($event);selectPane('preview')"/>}
+  }
+
+ @if(detail();as item){   @if(item.actions.length){
+    <form class="decision-form" (ngSubmit)="decide()"><h4>Administrative Decision</h4>
+     <label>Action<select appField name="action" [(ngModel)]="chosen" required><option value="">Select an action</option>@for(action of item.actions;track action.id){<option [value]="action.id">{{action.label}}</option>}</select></label>
+     <label>Reason<select appField name="reason" [(ngModel)]="reason" required><option value="">Select a reason</option>@for(value of reasons;track value){<option [value]="value">{{value.replaceAll('_',' ')|titlecase}}</option>}</select></label>
+     <label>Additional explanation (optional)<textarea appField name="explanation" [(ngModel)]="explanation" maxlength="500" rows="3"></textarea></label>
+     <button appButton type="submit" [disabled]="busy()||!chosen||!reason">{{busy()?'Saving…':'Confirm Decision'}}</button>
+    </form>
+   } }
+ </div></div>
+</dialog>

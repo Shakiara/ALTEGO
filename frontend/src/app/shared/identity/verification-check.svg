@@ -1,0 +1,5 @@
+<!-- ALTEGO necesita un símbolo vectorial para la marca de verificación. -->
+<!-- Este recurso define sus trazos y formas sin depender de imágenes externas. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 215 201" fill="none" aria-hidden="true" focusable="false">
+  <path fill="currentColor" fill-rule="evenodd" d="M 205 5 L 201 3 L 193 3 L 185 8 L 178 19 L 158 45 L 154 52 L 145 63 L 143 67 L 121 96 L 119 100 L 92 136 L 90 140 L 81 151 L 79 155 L 75 159 L 74 159 L 53 138 L 53 137 L 52 137 L 50 134 L 49 134 L 47 131 L 46 131 L 44 128 L 43 128 L 41 125 L 40 125 L 38 122 L 37 122 L 35 119 L 34 119 L 32 116 L 31 116 L 29 113 L 24 109 L 21 108 L 13 108 L 8 110 L 5 113 L 3 117 L 3 128 L 5 132 L 67 194 L 72 197 L 81 197 L 85 195 L 93 186 L 100 175 L 109 164 L 124 142 L 133 131 L 135 127 L 141 120 L 143 116 L 149 109 L 164 87 L 173 76 L 175 72 L 181 65 L 183 61 L 209 26 L 211 22 L 211 13 L 209 9 Z"/>
+</svg>

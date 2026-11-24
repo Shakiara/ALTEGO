@@ -1,0 +1,40 @@
+/* ALTEGO necesita una presentación coherente para los ajustes visuales de reseñas y vistas de producto. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+.search-control .search-field{display:block;width:0;overflow:hidden;opacity:0;visibility:hidden;transition:width .24s ease,opacity .2s ease;flex-shrink:1}
+.search-control .search-field.field-open{width:clamp(130px,20vw,270px);opacity:1;visibility:visible;padding:4px}
+body .search-control .search-field input{width:100%;min-width:0;animation:none;height:38px;min-height:38px;padding:8px 12px;box-shadow:none;border-radius:22px!important}
+body .search-control .search-field input:focus{outline:2px solid #af7d9c;outline-offset:-2px;box-shadow:inset 0 0 0 4px #f9edf5a6}
+.menu-identity .account-handle{color:#956085;font-size:16px;font-weight:500;letter-spacing:.2px;line-height:1.4}
+.catalog-layout .sidebar{align-self:start}
+body .product-card .product-info{padding:17px 19px 20px}
+body .product-card .product-title{font-family:var(--font-display);font-size:21px;line-height:1.25;font-weight:400;letter-spacing:-.35px;color:#624158}
+body .product-card .price{font-family:var(--font-display);font-size:27px;font-weight:400;color:#83546f;letter-spacing:-.65px;line-height:1.1}
+body .product-card .price small{font-family:var(--font-body);font-size:9px;letter-spacing:1px;color:#856d80;margin-left:5px}
+body .product-card .creator-link{font-size:11px;color:#826d80;margin:2px 0 8px}
+body .product-card .product-bottom{padding-top:12px;align-items:center;border-top:1px solid #fff7}
+body .product-card .card-link{padding:9px 14px;background:linear-gradient(130deg,#f0d4e080,#e4d9ed80);font-weight:400;box-shadow:inset 0 1px #fffd,0 3px 10px #9b6d8610}
+body .product-card .card-link span{font-size:12px;letter-spacing:.3px}
+body .detail-grid{gap:32px;align-items:stretch;grid-template-columns:repeat(2,minmax(0,1fr))}
+body .detail-art{height:auto;min-height:320px;position:relative;top:auto;padding:26px;min-width:0}
+.detail-art app-model{position:absolute;inset:26px;width:calc(100% - 52px);height:calc(100% - 52px)}
+body .detail-copy.glass-panel{padding:38px}
+body .detail-copy h1{font-size:clamp(32px,3.3vw,48px);font-weight:400;letter-spacing:-1.2px;line-height:1.12;margin:20px 0 12px}
+.detail-copy .creator-link{margin:0 0 18px;font-size:13px}
+body .detail-copy .detail-price{font-family:var(--font-display);font-size:37px;line-height:1.1;color:#83546f;letter-spacing:-.8px;margin:0;padding:20px 0;border-top:1px solid #fff9}
+.detail-price small{font-family:var(--font-body);letter-spacing:1.2px;font-size:10px}
+body .detail-copy .item-description{font-size:14px;line-height:1.8;margin:4px 0 24px;white-space:pre-line}
+.detail-copy .swatches{gap:13px;margin:0 0 14px}.detail-copy .variant-caption{display:flex;align-items:center;gap:12px;font-size:12px;margin:0 0 20px}.status-caption{font-size:10px;letter-spacing:.5px;background:#fff5;border:1px solid #fff8;border-radius:20px;padding:3px 9px}
+.detail-copy .specs{margin:0 0 24px}.detail-copy .detail-actions{gap:10px;align-items:center}.detail-actions>*{flex:1;white-space:nowrap}
+body .review-section{align-items:start;gap:32px;grid-template-columns:repeat(2,minmax(0,1fr))}
+body .review-section .community-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:12px;margin:0;font:inherit;letter-spacing:normal}
+.community-heading .eyebrow{margin:0;text-align:center;line-height:1.6}
+.community-heading .count{margin:0;flex-shrink:0;min-width:30px;height:30px;padding:0 6px;background:var(--gradient-active);border:1px solid #fff9;color:var(--color-brand);font-size:12px}
+.community-column .review-scroll>.review:first-child{margin-top:0}
+.community-column,.review-form{min-width:0}.review-form{align-self:start}
+.review-scroll{max-height:550px;overflow-y:auto;overflow-x:hidden;padding:4px 12px 4px 4px;scrollbar-width:thin;scrollbar-color:#c9acc180 transparent;overscroll-behavior-y:contain;border-radius:20px}
+.review-scroll:focus-visible{outline:2px solid var(--color-focus);outline-offset:4px}.review-top{align-items:center;flex-wrap:wrap;gap:12px}.review-author{display:flex;align-items:center;gap:11px;min-width:0;flex:1}.review-author strong,.review-handle{overflow-wrap:anywhere;font-size:13px}.review-handle{color:#885d7c;font-weight:500}.review-handle:hover{text-decoration:underline}.review-avatar{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border-radius:50%;border:1px solid #fff;background:linear-gradient(135deg,#edd4e5,#e2dbf0);color:#885d7c;font-family:var(--font-display);font-size:19px}.generic-avatar{background:#f1ebf3;color:#8c8190}.review .stars{font-size:12px;letter-spacing:1px}
+.identity-picker{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0 10px}.identity-picker legend{font-size:12px;margin-bottom:10px;font-weight:600}.review-form .identity-picker label{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:10px 15px;border:1px solid #fff;border-radius:24px;background:#fff3;font-weight:400;cursor:pointer}.identity-picker label.active{background:var(--gradient-active)}.identity-picker input{width:16px;min-height:16px;height:16px;margin:0;accent-color:#9c6a8c}.version-changes{padding-left:20px;font-size:13px;line-height:1.7}.version-changes li{margin:7px 0;overflow-wrap:anywhere}
+@media(max-width:850px){body .detail-grid,body .review-section{gap:22px}.detail-copy.glass-panel{padding:26px!important}.detail-copy h1{font-size:32px}.review-scroll{max-height:480px}}
+@media(max-width:760px){.catalog-layout .sidebar{padding:10px;max-width:100%}.sidebar .sidebar-heading{display:none}.sidebar .category-list{gap:5px;flex-wrap:wrap;align-items:center}.sidebar .category-button{flex:0 0 auto;width:auto;min-width:40px;height:42px;min-height:42px;gap:0;padding:10px}.sidebar .category-button app-icon{width:19px;height:19px;flex:0 0 19px}.sidebar .category-button > span{display:block;max-width:0;opacity:0;overflow:hidden;transition:max-width .24s ease,opacity .2s ease,margin .24s ease;margin-left:0}.sidebar .category-button.selected > span{max-width:105px;opacity:1;margin-left:8px}.sidebar .category-button small{display:none}body .detail-grid,body .review-section{grid-template-columns:minmax(0,1fr)}body .detail-art{display:block;box-sizing:border-box;width:100%;height:auto;min-height:0;aspect-ratio:auto;padding:20px}                                                                                               body .detail-art::after{content:"";display:block;padding-top:100%;pointer-events:none}.detail-art app-model{inset:20px;width:calc(100% - 40px);height:calc(100% - 40px)}.review-scroll{max-height:430px}.detail-copy .detail-actions{flex-wrap:wrap}}
+@media(max-width:520px){.search-control.search-open{left:12px;right:103px}.search-control .search-field.field-open{flex:1;width:100%;min-width:0}.search-control .search-field input{font-size:12px}.detail-copy .detail-actions>*{flex:1 1 100%}.review-author{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.search-control .search-field,.sidebar .category-button > span{transition:none}}

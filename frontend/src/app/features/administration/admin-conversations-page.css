@@ -1,0 +1,445 @@
+/* ALTEGO necesita una presentación coherente para el listado y los detalles de casos de conversaciones. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+:host {
+    display: block;
+    min-width: 0
+}
+
+.conversation-directory.glass-panel {
+    padding: 0;
+    border-radius: 18px;
+    --glass-fill: linear-gradient(130deg, #ffffffa8, #ffffff7d);
+    overflow-wrap: anywhere
+}
+
+.directory-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 26px 0
+}
+
+.directory-heading h2 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -.3px;
+    margin: 0
+}
+
+.directory-count {
+    font-size: 11px;
+    background: #f2eaf6;
+    border: 1px solid #e5d8eb;
+    border-radius: 7px;
+    padding: 5px 9px;
+    color: #81648b
+}
+
+.queue-tabs,
+.detail-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap
+}
+
+.queue-tabs {
+    padding: 20px 26px 0
+}
+
+.queue-tabs button,
+.detail-tabs button {
+    font-size: 12px;
+    padding: 9px 13px
+}
+
+.queue-tabs button[aria-pressed=true],
+.detail-tabs button[aria-pressed=true] {
+    background: #eadff0;
+    border-color: #d5bfde;
+    color: #684b72
+}
+
+.case-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 16px;
+    padding: 22px 26px 24px
+}
+
+.case-filters label,
+.decision-footer label {
+    display: grid;
+    gap: 7px;
+    font-size: 11px;
+    min-width: 0
+}
+
+.case-filters :is(input, select),
+.decision-footer select {
+    margin: 0;
+    min-width: 0;
+    font-size: 12px;
+    min-height: 44px
+}
+
+.case-filters button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 17px;
+    min-height: 44px;
+    font-size: 12px
+}
+
+.case-filters app-icon {
+    width: 15px;
+    height: 15px
+}
+
+.directory-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 13px;
+    padding: 40px 24px;
+    min-height: 310px;
+    border-top: 1px solid #e7dceb
+}
+
+.empty-symbol {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 19px;
+    background: linear-gradient(135deg, #f0e3ee, #eae7f5);
+    border: 1px solid #e4d7e8;
+    color: #9a7a9e
+}
+
+.empty-symbol app-icon {
+    width: 22px;
+    height: 22px
+}
+
+.directory-state h3 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -.25px;
+    margin: 2px 0 0
+}
+
+.directory-state p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    max-width: 390px;
+    margin: 0
+}
+
+.directory-state button {
+    font-size: 12px;
+    padding: 9px 13px
+}
+
+.case-drawer.ui-modal {
+    position: fixed;
+    inset: 16px 16px 16px auto;
+    margin: 0;
+    width: min(760px, calc(100% - 32px));
+    max-width: calc(100% - 32px);
+    height: calc(100dvh - 32px);
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    overflow: hidden
+}
+
+.case-drawer[open] {
+    display: flex;
+    flex-direction: column
+}
+
+.drawer-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #e4d8e8;
+    flex-shrink: 0
+}
+
+.drawer-heading h2 {
+    font-size: 22px;
+    margin: 0;
+    letter-spacing: -.5px
+}
+
+.detail-tabs {
+    padding: 12px 24px;
+    border-bottom: 1px solid #e4d8e8;
+    flex-shrink: 0
+}
+
+.detail-content {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 22px 24px;
+    overflow-wrap: anywhere
+}
+
+.detail-content h3 {
+    font-size: 15px;
+    margin: 24px 0 12px
+}
+
+.case-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin: 22px 0
+}
+
+.case-fields dt {
+    font-size: 11px;
+    color: var(--color-muted);
+    margin-bottom: 5px
+}
+
+.case-fields dd {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0
+}
+
+.case-identifier {
+    grid-column: 1/-1
+}
+
+.case-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 7px;
+    font-size: 11px;
+    border: 1px solid #d7e2f0;
+    background: #e9eff9;
+    color: #526f93
+}
+
+.case-status[data-status=restored] {
+    background: #edf5f0;
+    color: #47745e;
+    border-color: #d8e9df
+}
+
+.case-status[data-status=removed] {
+    background: #faecee;
+    color: #9a5967;
+    border-color: #f0d7dc
+}
+
+.capitalize {
+    text-transform: capitalize
+}
+
+.reason-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #e4d8e8;
+    border-radius: 12px
+}
+
+.reason-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    font-size: 12px
+}
+
+.reason-list li+li {
+    border-top: 1px solid #e4d8e8
+}
+
+.decision-history {
+    padding-left: 20px;
+    font-size: 13px
+}
+
+.decision-history li {
+    padding: 10px 0
+}
+
+.decision-history time {
+    display: block;
+    color: var(--color-muted);
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 6px 0
+}
+
+.reported-content {
+    font-size: 13px;
+    line-height: 1.7
+}
+
+.reported-content p {
+    white-space: pre-wrap
+}
+
+.reported-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: 14px 0
+}
+
+.decision-footer {
+    flex-shrink: 0;
+    padding: 16px 24px;
+    border-top: 1px solid #e4d8e8;
+    background: #fbf8fbea
+}
+
+.case-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px
+}
+
+.case-actions button {
+    min-height: 42px;
+    font-size: 12px;
+    padding: 10px 14px
+}
+
+.case-actions .danger {
+    color: #8c254d
+}
+
+@media(max-width:620px) {
+    .directory-heading {
+        padding: 20px 16px 0
+    }
+
+    .queue-tabs {
+        padding: 16px 16px 0
+    }
+
+    .case-filters {
+        padding: 18px 16px 20px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px
+    }
+
+    .case-filters label:first-child {
+        grid-column: 1/-1
+    }
+
+    .directory-state {
+        min-height: 270px;
+        padding: 34px 20px
+    }
+
+    .case-drawer.ui-modal {
+        inset: 8px;
+        width: calc(100% - 16px);
+        max-width: calc(100% - 16px);
+        height: calc(100dvh - 16px);
+        max-height: calc(100dvh - 16px)
+    }
+
+    .drawer-heading,
+    .detail-content,
+    .decision-footer {
+        padding: 16px
+    }
+
+    .drawer-heading h2 {
+        font-size: 19px
+    }
+
+    .detail-tabs {
+        padding: 10px 16px;
+        gap: 6px
+    }
+
+    .detail-tabs button {
+        padding: 8px 11px
+    }
+
+    .case-fields {
+        gap: 14px
+    }
+
+    .case-actions {
+        gap: 8px
+    }
+
+    .case-actions button {
+        flex: 1
+    }
+}
+
+.case-drawer.ui-modal {
+    inset: 16px 16px 16px auto;
+    height: calc(100dvh - 32px);
+    max-height: calc(100dvh - 32px)
+}
+
+.detail-content {
+    flex: 1
+}
+
+.case-actions {
+    align-items: center
+}
+
+.report-entry {
+    padding: 12px 0;
+    border-bottom: 1px solid #e4d8e8;
+    font-size: 12px
+}
+
+.report-entry p {
+    margin: 5px 0;
+    color: var(--color-muted)
+}
+
+.case-report-tools {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px
+}
+
+.case-report-tools label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px
+}
+
+.case-report-tools input {
+    width: auto
+}
+
+@media(max-width:620px) {
+    .case-drawer.ui-modal {
+        inset: 8px;
+        height: calc(100dvh - 16px);
+        max-height: calc(100dvh - 16px)
+    }
+}

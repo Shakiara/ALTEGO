@@ -1,0 +1,36 @@
+// ALTEGO necesita resolver los artículos y variantes de la bolsa de compras.
+// Este módulo reúne las operaciones y estructuras que atienden esa responsabilidad.
+import {requireUser,requireLiveSession} from '../accounts/auth.js';
+import {validVariantId} from '../products/variant-identity.js';
+import {productPublicFilter} from '../administration/admin-audit.js';
+import {decorateProduct} from '../products/product-dto.js';
+import {creatorCommerceMigration} from "../../infrastructure/schema/readiness.js";
+import {ownsVariant} from './acquisitions.js';
+const fail=(message,status=409)=>Object.assign(Error(message),{status});
+const parse=value=>typeof value==='string'?JSON.parse(value):value;
+export function installShoppingBag(app,pool){
+ const base='/api/account/bag';
+ app.use(base,requireUser,async(req,res,next)=>{res.set('Cache-Control','private, no-store');if(!(await pool.execute('SELECT id FROM schema_migrations WHERE id=?',[creatorCommerceMigration]))[0].length)return res.status(503).json({error:'Shopping Bag is not available yet.'});next();});
+ app.get(base,async(req,res)=>{const [rows]=await pool.execute(`SELECT b.*,p.owner_id,u.username creator_name,p.status,p.purged_at,p.moderation_removed,p.current_version_id,v.version_number,v.snapshot FROM shopping_bag_items b JOIN productos p ON p.id=b.product_id LEFT JOIN users u ON u.id=p.owner_id LEFT JOIN product_versions v ON v.id=p.current_version_id AND v.product_id=b.product_id WHERE b.user_id=? ORDER BY b.created_at DESC,b.product_id,b.variant_id,b.version_id`,[req.user.id]);
+  const items=[],seen=new Set();for(const row of rows){const key=row.product_id+':'+row.variant_id;if(seen.has(key))continue;seen.add(key);const publicItem=['Published','Unlisted'].includes(row.status)&&!row.purged_at&&!row.moderation_removed,snapshot=parse(row.snapshot),variant=snapshot?.variants?.find(v=>v.id===row.variant_id&&v.available!==false),owned=await ownsVariant(pool,req.user.id,row.product_id,row.variant_id);items.push({product_id:row.product_id,variant_id:row.variant_id,version_id:row.current_version_id||row.version_id,saved_version_id:row.version_id,version_changed:row.current_version_id!==row.version_id,owned,revision:row.revision,checkout_eligible:Boolean(publicItem&&variant&&!owned&&row.status==='Published'&&row.owner_id!==req.user.id),available_variants:publicItem?(snapshot?.variants||[]).filter(v=>v.available!==false).map(v=>({id:v.id,name:v.name,hex:v.hex})):[],available:Boolean(publicItem&&variant&&!owned),product:publicItem&&variant?decorateProduct({...snapshot,creator_name:row.creator_name,current_version_id:row.current_version_id,version_number:row.version_number,status:row.status,variants:[variant]}):null});}res.json({items,subtotal:items.reduce((sum,item)=>sum+(item.available?Math.round((item.product?.price||0)*100):0),0)/100});
+ });
+ app.put(base+'/:id',async(req,res)=>{const {variant_id,version_id}=req.body||{};if(Object.keys(req.body||{}).some(k=>!['variant_id','version_id'].includes(k))||!validVariantId(variant_id,req.recordId)||!Number.isSafeInteger(version_id)||version_id<1)throw fail('Choose an available item and color.',400);
+  const sql=await pool.getConnection();try{await sql.beginTransaction();await sql.execute('SELECT id FROM users WHERE id=? FOR UPDATE',[req.user.id]);await requireLiveSession(sql,req);const [[product]]=await sql.execute("SELECT p.* FROM productos p WHERE p.id=? AND p.status IN ('Published','Unlisted') AND p.purged_at IS NULL"+await productPublicFilter(sql)+' FOR UPDATE',[req.recordId]);if(!product)throw fail('This item is unavailable.',404);if(product.owner_id===req.user.id)throw fail('You cannot add your own items to your bag.',403);if(product.current_version_id!==version_id)throw fail('This item has a new version. Reload before adding it.');const [[version]]=await sql.execute('SELECT snapshot FROM product_versions WHERE id=? AND product_id=?',[version_id,product.id]);if(!version||!parse(version.snapshot).variants.some(v=>v.id===variant_id&&v.available!==false))throw fail('This color is unavailable.',404);
+   if(await ownsVariant(sql,req.user.id,product.id,variant_id))throw fail('You already own this color.');
+   const [[existing]]=await sql.execute('SELECT variant_id FROM shopping_bag_items WHERE user_id=? AND product_id=? AND variant_id=?',[req.user.id,product.id,variant_id]);
+   if(!existing)await sql.execute('INSERT INTO shopping_bag_items(user_id,product_id,variant_id,version_id) VALUES (?,?,?,?)',[req.user.id,product.id,variant_id,version_id]);await sql.commit();res.json({added:!existing,product_id:product.id,variant_id,version_id});
+  }catch(error){await sql.rollback();throw error;}finally{sql.release();}
+ });
+ app.patch(base+'/:id/:variantId',async(req,res)=>{
+  const body=req.body||{};if(Object.keys(body).some(k=>!['variant_id','revision'].includes(k))||!validVariantId(req.params.variantId,req.recordId)||!validVariantId(body.variant_id,req.recordId)||!Number.isSafeInteger(body.revision))throw fail('Choose a valid color.',400);
+  const sql=await pool.getConnection();try{await sql.beginTransaction();await sql.execute('SELECT id FROM users WHERE id=? FOR UPDATE',[req.user.id]);await requireLiveSession(sql,req);
+   const [[p]]=await sql.execute("SELECT * FROM productos WHERE id=? FOR UPDATE",[req.recordId]);if(!p||!['Published','Unlisted'].includes(p.status)||p.purged_at||p.moderation_removed||p.owner_id===req.user.id)throw fail('This item is unavailable.',409);
+   const [[entry]]=await sql.execute('SELECT revision FROM shopping_bag_items WHERE user_id=? AND product_id=? AND variant_id=?',[req.user.id,p.id,req.params.variantId]);if(!entry||entry.revision!==body.revision)throw fail('Your selection changed. Refresh the bag.');
+   const [[v]]=await sql.execute('SELECT snapshot FROM product_versions WHERE id=? AND product_id=?',[p.current_version_id,p.id]);if(!v||!parse(v.snapshot).variants.some(v=>v.id===body.variant_id&&v.available!==false))throw fail('This color is unavailable.');
+   if(body.variant_id!==req.params.variantId){if((await sql.execute('SELECT variant_id FROM shopping_bag_items WHERE user_id=? AND product_id=? AND variant_id=?',[req.user.id,p.id,body.variant_id]))[0].length)throw fail('This color is already in your bag.');if(await ownsVariant(sql,req.user.id,p.id,body.variant_id))throw fail('You already own this color.');
+    await sql.execute('UPDATE shopping_bag_items SET variant_id=?,version_id=?,revision=revision+1 WHERE user_id=? AND product_id=? AND variant_id=?',[body.variant_id,p.current_version_id,req.user.id,p.id,req.params.variantId]);}
+   await sql.commit();res.json({updated:true});
+  }catch(e){await sql.rollback();throw e;}finally{sql.release();}
+ });
+ app.delete(base+'/:id/:variantId',async(req,res)=>{if(!validVariantId(req.params.variantId,req.recordId))throw fail('Invalid bag entry.',400);const sql=await pool.getConnection();try{await sql.beginTransaction();await sql.execute('SELECT id FROM users WHERE id=? FOR UPDATE',[req.user.id]);await requireLiveSession(sql,req);await sql.execute('DELETE FROM shopping_bag_items WHERE user_id=? AND product_id=? AND variant_id=?',[req.user.id,req.recordId,req.params.variantId]);await sql.commit();res.status(204).end();}catch(error){await sql.rollback();throw error;}finally{sql.release();}});
+}

@@ -1,0 +1,25 @@
+{
+  "name": "altego",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install": "npm --prefix backend ci && npm --prefix frontend ci",
+    "start": "node scripts/console/development-console.mjs",
+    "build": "npm --prefix frontend run build",
+    "check:api": "node scripts/run/check-api.js",
+    "recover:uploads": "node scripts/maintenance/recover-uploads.mjs",
+    "recover:product-storage": "node scripts/maintenance/recover-product-storage.mjs",
+    "storage:cleanup": "node scripts/maintenance/storage-cleanup.mjs",
+    "recover:profile-media": "node scripts/maintenance/recover-profile-media.mjs",
+    "backup:profiles": "node scripts/maintenance/backup-profiles.mjs",
+    "setup": "node scripts/setup/install.mjs",
+    "admin:audit-retention": "node scripts/maintenance/admin-audit-retention.mjs",
+    "storage:info": "node scripts/maintenance/refresh-creator-information.mjs",
+    "console": "node scripts/console/development-console.mjs --console",
+    "package:files": "node scripts/package-files.mjs"
+  },
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  }
+}

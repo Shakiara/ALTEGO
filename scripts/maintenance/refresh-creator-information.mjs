@@ -1,0 +1,4 @@
+// ALTEGO necesita resolver la actualización de información derivada por creador.
+// Este módulo reúne las operaciones y estructuras que atienden esa responsabilidad.
+import mysql from '../../backend/node_modules/mysql2/promise.js';import {MongoClient} from '../../backend/node_modules/mongodb/lib/index.js';import config from '../../backend/config.js';import {configureStorageIdentity,refreshCreatorInformation} from '../../backend/infrastructure/storage/storage-identity.js';import {storageRoot} from '../../backend/infrastructure/storage/storage-resolver.js';
+const pool=mysql.createPool(config.mysql),mongo=new MongoClient(config.mongo.uri);try{await mongo.connect();await configureStorageIdentity(pool);await refreshCreatorInformation(pool,storageRoot,{mongo:mongo.db(config.mongo.database)});console.log('Creator information regenerated from current data.');}finally{await pool.end();await mongo.close();}

@@ -1,0 +1,67 @@
+<!-- ALTEGO necesita mostrar el directorio y la gestión autorizada de cuentas. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+<section appGlass class="accounts">
+ <header class="accounts-heading"><div><h2>{{moderationOnly?'Account Moderation':'Account directory'}}</h2></div>@if(result();as page){<span class="result-badge">{{page.total}} {{page.total===1?'account':'accounts'}}</span>}</header>
+ <form class="filters" (ngSubmit)="load()">
+  <label class="search-label">Search accounts <span class="search-input"><app-icon name="search"/><input id="account-search" appField name="search" [(ngModel)]="search" maxlength="254" [placeholder]="isAdmin()?'Search username or email…':'Search username…'"></span></label>
+  <button appButton class="apply-button" type="submit"><app-icon name="filter"/> Apply</button>
+  <div class="filter-fields">
+   @if(moderationOnly){<label>Sanctions<select appField name="discipline" [(ngModel)]="discipline"><option value="all">All sanctions</option><option value="warnings">Warnings</option><option value="temporary">Temporary suspensions</option><option value="indefinite">Indefinite suspensions</option></select></label>}
+   <label>Role <select appField name="role" [(ngModel)]="role"><option value="">All roles</option><option value="admin">Admin</option><option value="moderator">Moderator</option><option value="user">User</option></select></label>
+   <label>Status <select appField name="status" [(ngModel)]="status"><option value="">All statuses</option><option value="active">Active</option><option value="suspended">Suspended</option></select></label>
+   <label>Sort by <select appField name="sort" [(ngModel)]="sort"><option value="username">Username</option><option value="role">Role</option><option value="newest">Date joined</option></select></label>
+   <label>Order <select appField name="direction" [(ngModel)]="direction"><option value="asc">Ascending</option><option value="desc">Descending</option></select></label>
+  </div>
+ </form>
+ @if(error()){<div class="accounts-error"><app-icon name="warning"/><p class="notice error" role="alert">{{error()}}</p><button appButton type="button" (click)="load()">Try Again</button></div>}
+ @else{<app-workspace-table [showTotal]="false" [columns]="columns()" [rows]="rows()" [loading]="loading()" [page]="result()?.page??1" [pages]="pages()" [total]="result()?.total??0" (selected)="open($event)" (changed)="load($event)"/>}
+</section>
+<dialog #drawer appModal appAdminDialog #closer="adminDialog" [adminDirty]="dirty" [adminBusy]="isBusy" class="account-drawer" aria-labelledby="account-detail-title" (close)="closed()">
+ <header class="drawer-header"><div><span class="drawer-context">Account management</span><h2 id="account-detail-title">Account Details</h2></div><button class="icon-control" type="button" autofocus aria-label="Close account details" (click)="closer.requestClose()"><app-icon name="close"/></button></header>
+ <nav class="drawer-tabs" aria-label="Account detail sections">@for(tab of accountTabs();track tab){<button appButton type="button" [attr.aria-pressed]="pane===tab" (click)="pane=tab">{{tab==='account'?'Account':tab==='verification'?'Verification':'Sanctions'}}</button>}</nav>
+ <div class="drawer-content"><div class="admin-pane" tabindex="0" role="region" aria-label="Selected account section">
+ @if(detailError()){<div class="drawer-state"><app-icon name="warning"/><p class="notice error" role="alert">{{detailError()}}</p></div>}
+ @if(details();as data){
+  <section class="drawer-identity"><span class="detail-avatar" aria-hidden="true">{{data.account.username.slice(0,1).toUpperCase()}}</span><div><h3><a [routerLink]="['/creators',data.account.id]">{{'@'+data.account.username}}</a></h3>@if(data.account.email){<p class="detail-email">{{data.account.email}}</p>}<div class="identity-badges"><span class="detail-badge" [attr.data-tone]="data.account.role">{{roleNames[data.account.role]}}</span><span class="detail-badge" [attr.data-tone]="data.account.suspended?'suspended':'active'"><span class="status-dot"></span>{{data.account.suspended?'Suspended':'Active'}}</span><span class="detail-verified" [class.is-verified]="data.account.verified">@if(data.account.verified){<app-verified-creator-badge [creatorId]="data.account.id" [verified]="true"/>}@else{<app-icon name="unknown"/>}{{data.account.verified?'Verified Creator':'Not verified'}}</span></div></div></section>
+  @if(data.account.role==='admin'){<div class="protected-admin"><app-icon name="lock"/><div><strong>Protected administrator account</strong><p>Role changes and account sanctions are unavailable for Admin.</p></div></div>}
+  @if(isAdmin()&&data.account.role!=='admin'){<app-account-verification [hidden]="pane!=='verification'" [showIdentity]="false" [accountId]="data.account.id" (verifiedChange)="updateVerified($event)"/>}
+  <div class="account-action-grid" [hidden]="pane!=='account'">
+   @if(isAdmin()&&data.account.role!=='admin'){
+    <form class="detail-form role-form" (ngSubmit)="updateRole(data.account)"><div class="form-fields">
+     <header class="detail-section-heading"><span><app-icon name="user"/></span><h3>Account role</h3></header>
+     <label>Access level <select appField name="newRole" [(ngModel)]="selectedRole"><option value="user">User</option><option value="moderator" [disabled]="!data.moderatorEligibility?.eligible">Moderator</option></select></label>
+     @if(data.moderatorEligibility;as eligibility){<p class="action-help">Moderator: {{eligibility.ageDays}} / 30 days · {{eligibility.activeSanctions}} active sanctions · {{eligibility.accountActive?'Active':'Suspended'}}</p>@if(!eligibility.eligible){<p class="action-help">Requires an active account aged 30 days with no active sanctions.</p>}}
+     <p class="action-help">Changing a role ends this account's existing sessions.</p>
+     </div><button appButton type="submit" [disabled]="busy()||selectedRole===data.account.role||(selectedRole==='moderator'&&!data.moderatorEligibility?.eligible)">Change Role <app-icon name="arrow-right"/></button>
+    </form>
+   }
+   @if(canSanction(data.account)){
+    <form class="detail-form sanction-form" (ngSubmit)="issue(data.account)"><div class="form-fields">
+     <header class="detail-section-heading"><span><app-icon name="warning"/></span><h3>Account Sanction</h3></header>
+     <label>Action <select appField name="kind" [(ngModel)]="kind"><option value="warning">Warning</option><option value="suspension">Suspension</option></select></label>
+     <label>Reason <select appField name="reason" [(ngModel)]="reason" required><option value="">Select a reason</option>@for(option of reasons;track option){<option [value]="option">{{reasonNames[option]}}</option>}</select></label>
+     @if(kind==='suspension'){
+      @if(isAdmin()){<label class="check"><input type="checkbox" name="indefinite" [(ngModel)]="indefinite"> Indefinite</label>}
+      @if(!indefinite){<label>Duration in days (1–{{isAdmin()?365:7}}) <input appField type="number" name="days" [(ngModel)]="days" min="1" [max]="isAdmin()?365:7" step="1" required></label>}
+     }
+     <label>Additional explanation <span class="optional-label">Optional</span><textarea appField name="explanation" [(ngModel)]="explanation" maxlength="500" rows="2"></textarea></label>
+     </div><button appButton type="submit" class="sanction-submit" [disabled]="busy()||!reason||(kind==='suspension'&&!validDays())||(kind==='suspension'&&data.account.suspended)">{{kind==='warning'?'Issue Warning':'Suspend Account'}}</button>
+    </form>
+   }
+  </div>
+  <section class="sanction-history" [hidden]="pane!=='sanctions'">
+   <header class="history-heading"><h3>Sanction History</h3><span>{{data.sanctions.length}}</span></header>
+   @if(!data.sanctions.length){<div class="history-empty"><app-icon name="success"/><p>No sanctions recorded.</p></div>}
+   @if(data.sanctions.length){<div class="history-scroll" tabindex="0" role="region" aria-label="Sanction history entries">
+   @for(sanction of data.sanctions;track sanction.id){
+    <article class="sanction"><span class="sanction-icon"><app-icon [name]="sanction.kind==='warning'?'warning':'block'"/></span><div class="sanction-copy"><header><strong>{{sanction.kind==='warning'?'Warning':'Suspension'}}</strong>@if(sanction.kind==='suspension'){<span class="detail-badge" [attr.data-tone]="sanction.active?'suspended':'user'">{{sanction.active?'Active':sanction.lifted_at?'Lifted':'Expired'}}</span>}</header><p class="sanction-reason">{{reasonNames[sanction.reason]||sanction.reason}}</p><time>{{sanction.issued_at|date:'medium'}}</time>
+     @if(sanction.explanation){<p class="sanction-explanation">{{sanction.explanation}}</p>}
+     @if(sanction.kind==='suspension'&&sanction.expires_at){<p class="sanction-expiry">Ends {{sanction.expires_at|date:'medium'}}</p>}
+     @if(sanction.kind==='suspension'&&isAdmin()&&sanction.active&&data.account.role!=='admin'){<button appButton type="button" [disabled]="busy()" (click)="lift(data.account,sanction)">Lift Suspension</button>}
+    </div></article>
+   }
+   </div>}
+  </section>
+ }@else if(!detailError()){<div class="drawer-state" role="status"><app-icon name="user"/><p>Loading account…</p></div>}
+ </div></div>
+</dialog>

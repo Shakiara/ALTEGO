@@ -1,0 +1,130 @@
+/* ALTEGO necesita una presentación coherente para las superficies y controles de cristal compartidos. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+:root { --ink:var(--color-ink); --muted:var(--color-muted); font-family:var(--font-body); }
+body { background:var(--gradient-base); color:var(--color-ink); }
+.brand-word,.footer-brand { font-family:var(--font-display); color:var(--color-brand); }
+body .glass-panel.glass-panel {
+  position:relative;
+  min-width:0;
+  background:var(--glass-fill);
+  border:1px solid #ffffff80;
+  border-radius:var(--radius-panel);
+  backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  box-shadow:var(--shadow-glass),var(--shadow-reflection);
+}
+
+body .glass-panel.glass-panel::before {
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  padding:1px;
+  background:var(--gradient-edge);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask-composite:exclude;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  pointer-events:none;
+}
+body .header.glass-panel { --glass-blur:10px; border-radius:0 0 var(--radius-panel) var(--radius-panel); }
+body .header-search.glass-panel { border-radius:var(--radius-pill); box-shadow:var(--shadow-reflection); }
+body .sidebar.glass-panel { position:sticky; }
+body .product-card.glass-panel {
+  --edge-start:var(--edge-a, var(--color-rose));
+  --edge-end:var(--edge-b, var(--color-lavender));
+  transition:box-shadow var(--duration-normal) var(--ease-ui), border-color var(--duration-normal) var(--ease-ui);
+}
+
+body .product-card.glass-panel:hover,body .product-card.glass-panel:focus-within {
+  transform:none;
+  box-shadow:var(--shadow-hover),var(--shadow-reflection);
+}
+body .detail-copy.glass-panel { padding:var(--space-8); }
+body .review.glass-panel { padding:var(--space-6); margin-bottom:var(--space-3); border-radius:var(--radius-control); }
+body .notice.glass-panel { border-radius:var(--radius-control); }
+body .error.glass-panel { --glass-fill:linear-gradient(130deg,#ffe5e1a6,#fff5f080); color:var(--color-danger); }
+body .success.glass-panel { --glass-fill:linear-gradient(130deg,#e1f4e8a6,#f3fff880); color:var(--color-success); }
+body .delete-confirm.glass-panel { color:var(--color-danger); }
+.detail-art model-viewer,.product-art model-viewer,.product-art,model-viewer { background:transparent; --poster-color:transparent; }
+body .ui-field {
+  background:var(--glass-field);
+  border:1px solid #bea7bd80;
+  border-radius:var(--radius-control);
+  color:var(--color-ink);
+  box-shadow:inset 0 1px #ffffffd9;
+  transition:border-color var(--duration-fast) var(--ease-ui),background-color var(--duration-fast) var(--ease-ui);
+  min-height:44px;
+}
+body .ui-field::placeholder { color:var(--color-muted); opacity:1; }
+body .ui-field:hover:not(:disabled) { border-color:#9c7594; }
+body .ui-field:focus { border-color:var(--color-focus); background:#ffffff70; }
+body select.ui-field option { background:#faf5fa; color:var(--color-ink); }
+body .header-search .ui-field { background:transparent; border:0; box-shadow:none; border-radius:0; }
+body .ui-button {
+  min-height:44px;
+  transition:background-color var(--duration-fast) var(--ease-ui),box-shadow var(--duration-fast) var(--ease-ui),border-color var(--duration-fast) var(--ease-ui);
+}
+body .ui-button:where(:not(.category-button):not(.dark):not(.danger)) {
+  background:var(--glass-field);
+  border:1px solid #ffffffc9;
+  border-radius:var(--radius-control);
+  color:var(--color-ink);
+  box-shadow:var(--shadow-reflection);
+}
+body .ui-button.dark { background:#91546f; border-color:#91546f; color:#fff; }
+body .ui-button.dark:hover:not(:disabled) { background:#79415b; }
+body .ui-button.danger { background:#ffffff50; color:var(--color-danger); border-color:#b46e7880; }
+body .ui-button:hover:not(:disabled) { box-shadow:0 3px 12px #a5809b30,var(--shadow-reflection); }
+body .ui-button:active:not(:disabled) { box-shadow:inset 0 1px 4px #81546e28; }
+body .filters .ui-button,body .ui-button.card-link { border-radius:var(--radius-pill); }
+body .ui-button.selected,body .ui-button.card-link,body .header nav a.active { background:var(--gradient-active); color:#63334e; }
+body :is(button,input,select,textarea):disabled,body .ui-button[aria-disabled='true'] { opacity:var(--disabled-opacity); cursor:not-allowed; }
+body :is(a,button,input,textarea,select,summary):focus-visible { outline:3px solid var(--color-focus); outline-offset:3px; }
+body .header-search:focus-within { outline:2px solid var(--color-focus); outline-offset:2px; }
+body .header-search input:focus-visible { outline:none; }
+body .ui-modal { width:min(32rem,calc(100% - 2rem)); max-height:calc(100dvh - 2rem); padding:var(--space-8); color:var(--color-ink); overflow:auto; }
+body .ui-modal::backdrop { background:#40334440; }
+body .empty { color:var(--color-muted); }
+body .detail-copy > p,body .review-form > p,body .form-intro > p,body .field-help { color:var(--color-muted); }
+@media(max-width:760px) {
+  body .sidebar.glass-panel { position:relative; }
+  body .header.glass-panel { backdrop-filter:none; -webkit-backdrop-filter:none; }
+  body .detail-copy.glass-panel { padding:var(--space-6); }
+  body .review.glass-panel { padding:var(--space-4); }
+}
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  body .ui-button,body .ui-field,body .product-card.glass-panel { transition:none; }
+}
+@supports not (backdrop-filter:blur(1px)) {
+  body .glass-panel.glass-panel { background:var(--glass-fallback); }
+}
+@supports not (mask-composite:exclude) {
+  body .glass-panel.glass-panel::before { display:none; }
+  body .glass-panel.glass-panel { border-color:var(--color-lavender); }
+}
+@media(forced-colors:active) {
+  body .glass-panel.glass-panel,body .ui-button,body .ui-field { border:1px solid CanvasText; background:Canvas; color:CanvasText; box-shadow:none; }
+  body .glass-panel.glass-panel::before,app-ambient-background { display:none; }
+}
+
+
+body .product-card :is(.badge,.preview-label,.card-link),body .header nav {
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+body .detail-copy h1,body .form-intro h1,body .review-section h2 {
+  font-family:var(--font-display);
+  font-weight:400;
+  color:var(--color-brand);
+}
+
+
+.auth-panel{max-width:560px;margin:40px auto;padding:var(--space-8)}
+.auth-panel h1{font-family:var(--font-display);color:var(--color-brand);font-size:36px}
+.auth-panel label{margin-bottom:20px}.auth-panel .remember-field{display:flex;align-items:center;gap:12px;min-height:44px}.remember-field input{width:18px;height:18px;margin:0}.auth-switch{margin:24px 0 0}.auth-switch a{text-decoration:underline}.auth-panel dd{margin:6px 0 20px;overflow-wrap:anywhere}.auth-panel dt{font-weight:600}.header nav{flex-wrap:wrap;justify-content:center}
+@media(max-width:480px){.auth-panel{padding:20px}.header{grid-template-columns:1fr}.header nav{justify-self:start}}
+
+
+.studio-heading{margin:1.5rem 0}.studio-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:1.5rem;align-items:start}.studio-grid>*{min-width:0}.studio-preview,.version-history,.managed-item{padding:1.5rem;border-radius:24px;margin-bottom:1rem}.studio-preview app-model{display:block;height:360px}.variant-editor{padding:1rem;border:1px solid #ffffff88;border-radius:18px;margin:1rem 0}.swatches{display:flex;flex-wrap:wrap;gap:.6rem;margin:.8rem 0}.swatches button,.swatches span{display:inline-block;width:30px;height:30px;border:2px solid white;border-radius:50%;box-shadow:0 2px 7px #6b45652b}.swatches button[aria-pressed=true]{outline:2px solid #9b5675;outline-offset:2px}.managed-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:1rem}.version-history small,.managed-item small{overflow-wrap:anywhere}.version-history details{padding:.8rem 0;border-bottom:1px solid #ffffff80}.studio-grid input[type=file]{max-width:100%;font-size:.85rem}.studio-grid .actions,.managed-item .actions{flex-wrap:wrap}.studio-grid fieldset{min-width:0}.studio-grid .product-form{width:auto}@media(max-width:850px){.studio-grid{grid-template-columns:1fr}.studio-preview app-model{height:300px}.studio-heading h1{font-size:2.5rem}}

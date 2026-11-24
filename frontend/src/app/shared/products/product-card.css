@@ -1,0 +1,114 @@
+/* ALTEGO necesita una presentación coherente para las tarjetas de productos y variantes. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+:host { display:block; min-width:0; }
+.product-card { --card-tint:rgba(246,207,223,.34); --edge-a:#efb9d1; --edge-b:#c6c7ea; position:relative; min-width:0; border-radius:22px; }
+:host(:nth-child(4n+2)) .product-card { --card-tint:rgba(249,219,194,.4); --edge-a:#edc7ac; --edge-b:#ecc4cf; }
+:host(:nth-child(4n+3)) .product-card { --card-tint:rgba(222,208,244,.38); --edge-a:#d6b6e9; --edge-b:#bec8ec; }
+:host(:nth-child(4n+4)) .product-card { --card-tint:rgba(209,227,243,.38); --edge-a:#bfcde9; --edge-b:#e5bfd5; }
+.product-card:hover, .product-card:focus-within {; }
+.product-art { background:radial-gradient(ellipse at 50% 45%,#ffffff10 0,transparent 70%); border-radius:21px 21px 0 0; height:clamp(235px,19vw,300px); position:relative; overflow:hidden; }
+.product-art app-model { height:100%; padding:35px 9px 28px; }
+.badge { top:13px; left:13px; background:#fff5; border:1px solid #fff9; color:#75596d; padding:6px 10px; font-size:10px; font-weight:400; }
+.preview-label { position:absolute; left:13px; bottom:5px; display:inline-flex; align-items:center; gap:6px; font-size:10px; color:#74556e; padding:5px 9px; border:1px solid #fff9; background:#ffffff57; border-radius:20px; backdrop-filter:blur(8px); pointer-events:none; }
+.preview-label svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linejoin:round; }
+.product-info { display:block; padding:16px 15px 14px; }
+.product-title { font-size:14px; letter-spacing:-.2px; line-height:1.5; display:block; color:#382d3e; font-weight:500; overflow-wrap:anywhere; }
+.product-bottom { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:10px; }
+.price { font-size:16px; font-weight:400; letter-spacing:-.5px; }
+.price small { color:#856c7e; font-size:8px; letter-spacing:.5px; margin-left:3px; }
+.card-link { display:flex; align-items:center; gap:7px; border:1px solid #fffc; border-radius:22px; background:linear-gradient(135deg,#f0c2d5a6,#e3cbe9a6); padding:8px 10px; font-size:10px; color:#754a63; box-shadow:inset 0 1px 4px #fffa; transition:background .2s; }
+.card-link:hover { background:#edbbd3; }
+@media(max-width:1350px) {
+.product-art { height:265px }
+}
+@media(max-width:1050px) {
+.product-art { height:265px }
+}
+@media(max-width:760px) {
+.product-art { height:260px }
+}
+@media(max-width:480px) {
+.product-art { height:320px }
+.product-art app-model { padding:38px 14px 29px }
+.product-info { padding:17px 20px 18px }
+.product-title { font-size:17px }
+.price { font-size:19px }
+.price small { font-size:9px }
+.card-link { padding:10px 15px;font-size:11px }
+.badge { top:16px;left:16px }
+.preview-label { left:16px }
+}
+@media(prefers-reduced-motion:reduce) {
+.product-card, .card-link { transition:none }
+.product-card:hover, .product-card:focus-within {;}
+}
+@supports not (backdrop-filter:blur(1px)) {
+.product-card {;}
+}
+.product-card {; }
+.product-card:hover, .product-card:focus-within {; }
+.product-art { background:transparent; }
+.product-title { color:#342639;font-weight:500 }
+.price { color:#382b40 }
+.price small { color:#70596d }
+.product-info { background:linear-gradient(0deg,#ffffff14,transparent); border-radius:0 0 21px 21px; }
+.badge, .preview-label { background:#ffffff30; color:#63465e; backdrop-filter:blur(9px) saturate(110%); -webkit-backdrop-filter:blur(9px) saturate(110%); border-color:#ffffffb3; box-shadow:inset 0 1px #ffffff9c; }
+.card-link { background:linear-gradient(130deg,#edb2cf8c,#d6c1ea80); color:#663b58; border-color:#ffffffc9; backdrop-filter:blur(8px); box-shadow:inset 0 1px 3px #fffc,0 3px 12px #c48dad16; }
+.card-link:hover { background:linear-gradient(130deg,#edb2cfbf,#d6c1eaa6); }
+@media(max-width:760px) {
+.product-card {}
+.badge, .preview-label, .card-link { backdrop-filter:none;-webkit-backdrop-filter:none }
+}
+@media(prefers-reduced-motion:reduce) {
+.product-card {;}
+.product-card:hover, .product-card:focus-within {;}
+}
+@supports not (mask-composite:exclude) {
+.product-card {;}
+}
+@supports not (backdrop-filter:blur(1px)) {
+.product-card {;}
+}
+
+
+@property --pin-angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+.pin-control{position:absolute;top:10px;right:10px;z-index:4;display:grid;place-items:center;width:44px;height:44px;border:1px solid #ddb8d0;border-radius:50%;background:#ffffff55;backdrop-filter:blur(8px);color:#a86f96;box-shadow:inset 0 1px #ffffffa0;transition:background .2s,box-shadow .2s}
+.pin-control app-icon{width:19px;height:19px;transform:rotate(28deg)}.pin-control.pin-active{--pin-fill:#f2cfe4;background:#f6e6efad;color:#9b648a}.pin-control:hover:not(:disabled){background:#fff9;box-shadow:0 3px 12px #ba88a42a}.pin-control:focus-visible{outline:2px solid var(--color-brand);outline-offset:3px}.pin-control:disabled{opacity:.55;cursor:wait}
+.has-pin-control .card-favorite{right:62px}.has-pin-control .badge{max-width:calc(100% - 120px);overflow-wrap:anywhere}
+.pinned-outline{position:absolute;inset:-2px;border-radius:inherit;z-index:2;pointer-events:none;box-shadow:0 0 18px #c89c4526,0 4px 18px #b58b4320}
+.pinned-outline::before,.pinned-outline::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:2px;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;pointer-events:none}
+.pinned-outline::before{background:linear-gradient(130deg,#96703f,#ead79b 18%,#b38745 42%,#fff1c5 63%,#bc9752 82%,#ebd9a3)}
+.pinned-outline::after{background:conic-gradient(from var(--pin-angle),transparent 0deg 255deg,#fff9da15 280deg,#fff9db 310deg,#f1d48450 330deg,transparent 350deg);animation:pinned-perimeter 9s linear infinite}
+@keyframes pinned-perimeter{to{--pin-angle:360deg}}
+@media(prefers-reduced-motion:reduce){.pinned-outline::after{animation:none}.pin-control{transition:none}}
+@supports not (mask-composite:exclude){.pinned-outline{border:2px solid #c8a568}.pinned-outline::before,.pinned-outline::after{display:none}}
+
+.card-labels{position:absolute;top:13px;left:13px;right:58px;z-index:3;display:flex;flex-wrap:wrap;align-items:center;gap:5px;pointer-events:none}.has-pin-control .card-labels{right:112px}.card-labels .badge{position:static;max-width:100%;overflow-wrap:anywhere}.card-link app-icon{width:14px;height:14px}
+.pinned-badge{display:inline-flex;align-items:center;gap:4px;min-height:25px;padding:4px 7px;border-radius:999px;border:1px solid #c7ac7860;background:linear-gradient(130deg,#fff9e6b8,#efdfc58a);color:#806342;font-size:8px;font-weight:600;letter-spacing:.08em;line-height:1.2}.pinned-badge app-icon{width:9px;height:9px;transform:rotate(24deg)}
+
+.product-card.is-pinned{--glass-fill:linear-gradient(145deg,#fff8e9a8 0%,#f1e6d1a3 42%,#f7e4e7a0 76%,#fcf7eba8 100%);--edge-a:#d4b783;--edge-b:#efddbb;border-color:#dec69980}
+.product-card.is-pinned .product-art{isolation:isolate;background:radial-gradient(ellipse at 50% 42%,#fff9e91a,transparent 72%)}
+.product-card.is-pinned .product-art::before{content:'';position:absolute;inset:7% 12% 4%;z-index:-1;pointer-events:none;border-radius:50%;background:radial-gradient(ellipse at 50% 45%,#fff4d98c 0%,#e8cc8c38 38%,#f0d8d91c 62%,transparent 77%)}
+.product-card.is-pinned .product-info{background:linear-gradient(0deg,#fff8ea68,transparent);border-radius:0 0 21px 21px}.product-card.is-pinned .product-title{color:#624d43}.product-card.is-pinned .creator-link{color:#816d66}.product-card.is-pinned .price{color:#6e5140}.product-card.is-pinned .price small{color:#88715f}
+.product-card.is-pinned .card-link{background:linear-gradient(125deg,#f0dfbe9e,#edd8d79e);border-color:#fff9e5ce;color:#785a43;box-shadow:inset 0 1px 3px #fffdf0,0 3px 12px #a8875514}.product-card.is-pinned .card-link:hover{background:linear-gradient(125deg,#f0dfbec9,#edd8d7bd)}
+.product-card.is-pinned .pinned-outline{box-shadow:0 0 16px #c8a16426,0 5px 18px #ad8c5120}
+@media(max-width:480px){.card-labels{top:16px;left:16px}.pinned-badge{font-size:8px;padding:5px 7px}}
+@media(forced-colors:active){.product-card.is-pinned .product-art::before{display:none}.pinned-badge{border-color:CanvasText;background:Canvas;color:CanvasText}}
+
+
+.unavailable-art{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;color:#86728b;background:radial-gradient(ellipse,#f1e7f04d,transparent 70%)}.unavailable-art app-icon{width:42px;height:42px;opacity:.55}.unavailable-art span{font-size:13px}.favorite-color-caption{margin:0 0 10px;font-size:12px;color:#70546c;display:flex;justify-content:space-between;gap:8px;overflow-wrap:anywhere}.unavailable-price{font-size:14px;color:#87758b}.muted{font-size:11px;color:#87758b}
+
+
+.creator-link{display:flex;align-items:center;gap:7px;min-width:0;margin-top:9px;font-size:12px;line-height:1.35;color:#7c637a;text-decoration:none;min-height:20px}
+.creator-avatar{width:29px;height:29px;flex:0 0 29px;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#e7dce980;color:#987c99}.creator-avatar img{width:100%;height:100%;object-fit:cover}.creator-avatar app-icon{width:15px;height:15px}
+.creator-display-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.creator-link app-account-badges{flex-shrink:0}.creator-link:focus-visible{outline:2px solid var(--color-focus,#986d9a);outline-offset:3px;border-radius:4px}
+
+
+
+.product-info{container-type:inline-size}
+.product-bottom{gap:6px}.product-bottom .price{margin-right:auto;min-width:0;white-space:nowrap;font-size:15px}
+.product-bottom app-add-to-bag{flex:0 0 108px;order:1;--bag-font-size:11px;--bag-padding:9px 7px;--bag-gap:5px}
+.product-bottom .card-link{order:2;flex:0 0 auto;min-height:40px;box-sizing:border-box;padding:9px 7px;font-size:10px;gap:0;background:#ffffff40;border-color:#e4d5e780;color:#775b75;box-shadow:none}
+.product-bottom .card-link app-icon{display:none}.product-bottom .card-link:hover{background:#fff8}
+@container(max-width:225px){.product-bottom .price small{display:none}.product-bottom .price{font-size:14px}.product-bottom app-add-to-bag{flex-basis:101px}.product-bottom{gap:5px}.product-bottom .card-link{padding-inline:5px}}
+

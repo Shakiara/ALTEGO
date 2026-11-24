@@ -1,0 +1,34 @@
+/* ALTEGO necesita una presentación coherente para los controles de consulta del historial. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+.history-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.history-actions{position:relative;display:inline-block;margin:8px 0 14px}
+.history-actions>button{border-radius:20px;padding:8px 14px;background:#ffffff70}
+.history-menu{position:absolute;z-index:5;left:0;min-width:180px;padding:8px;border:1px solid #fff;border-radius:16px;background:#f7f0f8f2;backdrop-filter:blur(18px);box-shadow:0 10px 30px #73516c20;display:grid;gap:4px}
+.history-menu button{padding:10px;text-align:left;border-radius:10px}
+.change-group{padding:10px 0;border-top:1px solid #ffffff80}
+.change-group h3{font:600 11px var(--font-body,sans-serif);letter-spacing:.09em;text-transform:uppercase;color:#93647f;margin:0 0 9px}
+.change-group ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.change-group li{display:flex;align-items:center;gap:10px;line-height:1.5;font-size:12px;overflow-wrap:anywhere}
+.change-dot{flex:0 0 12px;width:12px;height:12px;border-radius:50%;border:1px solid #ffffff;background:#dbc3d8;box-shadow:0 0 0 1px #ad88a030}
+.change-group del{opacity:.6}.change-group strong{color:#865570}
+.review-moderation{margin-top:10px;padding-top:10px;border-top:1px solid #fff8;font-size:12px}
+.review-moderation button{padding:6px 12px;border-radius:15px}.review-moderation p{margin:8px 0}
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:24px 0 12px}
+.pagination button{min-width:34px;min-height:34px;border:1px solid #fff9;border-radius:18px;background:#ffffff40;padding:6px 10px;color:#704e67}
+.pagination button[aria-current=page]{background:linear-gradient(110deg,#efc8db,#dcd5ef);font-weight:600}
+.pagination button:disabled{opacity:.4}.pagination span{color:#887182}
+.collection-intro{margin-bottom:0}.collection-caption{justify-content:flex-end}
+@media(max-width:480px){.pagination{gap:4px}.pagination button{min-width:29px;padding:6px 8px}.history-menu{right:auto;left:0}}
+.version-history{padding:24px!important;border-radius:24px}
+.version-history>h2{font-family:Georgia,serif;font-weight:400;font-size:28px;color:#82566f;margin:0 0 20px}
+.version-card{border:1px solid #ffffffb3;border-radius:18px;background:linear-gradient(120deg,#ffffff45,#f4e9f72e);margin-top:10px;box-shadow:inset 0 1px #fff8;transition:background .25s,box-shadow .25s}
+.version-card.expanded{background:linear-gradient(120deg,#fff8,#efe8f55e);box-shadow:0 7px 18px #78546f09,inset 0 1px #fff}
+.version-toggle{display:flex;align-items:center;gap:14px;width:100%;padding:15px 18px;text-align:left;border:0;background:transparent;border-radius:18px;color:#78556d;cursor:pointer}
+.version-number{font:500 23px Georgia,serif;min-width:35px}.version-date{font-size:11px;color:#8a7383;flex:1}.version-chevron{font-size:20px;transition:transform .25s}.expanded .version-chevron{transform:rotate(180deg)}
+.version-collapse{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .28s ease,opacity .2s ease}.expanded .version-collapse{grid-template-rows:1fr;opacity:1}.version-clip{min-height:0;overflow:hidden}.version-content{padding:0 18px 16px}
+.version-buttons{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:2px 0 14px}.version-buttons button{display:inline-flex;align-items:center;gap:6px;border:1px solid #fffc;background:#ffffff80;border-radius:20px;padding:8px 12px;color:#7d5470;font-size:11px}.version-buttons app-icon{width:16px;height:16px}.version-buttons button:disabled{opacity:.45}
+.version-content .change-group{padding:12px 0}.version-content .change-group:last-child{padding-bottom:0}.version-content .change-group h3{font-size:10px;letter-spacing:.11em}.version-content .change-group li{font-size:12px}
+.review-author{flex-wrap:wrap;row-gap:4px}.anonymous-identity{font-size:11px;color:#94778c;font-weight:400}.anonymous-identity a{color:inherit;text-decoration:none}.anonymous-identity a:hover{text-decoration:underline}
+@media(max-width:800px){.version-history{padding:20px!important}}
+@media(max-width:480px){.version-history{padding:14px!important}.version-history>h2{font-size:25px}.version-toggle{gap:10px;padding:13px}.version-content{padding:0 13px 13px}.version-buttons{gap:6px}.version-buttons button{padding:8px 10px}.collection-intro{padding-bottom:10px}}
+@media(prefers-reduced-motion:reduce){.version-card,.version-collapse,.version-chevron{transition:none}}

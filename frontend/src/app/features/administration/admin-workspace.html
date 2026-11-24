@@ -1,0 +1,39 @@
+<!-- ALTEGO necesita mostrar la estructura y navegación del espacio administrativo. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+<section class="workspace" aria-label="Admin Workspace">
+ <aside appGlass class="workspace-sidebar">
+  <a class="workspace-brand" routerLink="/admin" aria-label="ALTEGO administration"><span class="brand-emblem"><app-icon name="grid"/></span><span><strong>ALTEGO</strong><small>Administration</small></span></a>
+  <ng-container [ngTemplateOutlet]="links"/>
+  @if(auth.user();as user){<div class="workspace-identity"><span class="user-monogram" aria-hidden="true">{{user.username.slice(0,1).toUpperCase()}}</span><div><strong><a [routerLink]="['/creators',user.id]">{{user.username}}</a></strong><span>{{user.role==='admin'?'Administrator':'Moderator'}}</span></div><app-icon name="lock"/></div>}
+ </aside>
+ <header class="workspace-header">
+  <div class="workspace-heading">
+   <button #menuButton class="menu-button icon-control" type="button" aria-label="Open workspace navigation" aria-haspopup="dialog" (click)="menu.showModal()"><app-icon name="grid"/></button>
+   <div><span class="workspace-context">Administration <span aria-hidden="true">/</span> {{context()}}</span><h1>{{pageTitle()}}</h1></div>
+  </div>
+  <a appButton class="back-store" routerLink="/"><app-icon name="arrow-left"/><span>Back to Store</span></a>
+ </header>
+ <section class="workspace-main"><router-outlet/></section>
+</section>
+<dialog #menu appModal appAdminDialog #menuCloser="adminDialog" class="workspace-menu" aria-labelledby="workspace-menu-title" (close)="menuButton.focus()">
+ <div class="menu-heading"><div><span class="eyebrow">ALTEGO</span><h2 id="workspace-menu-title">Workspace navigation</h2></div><button class="icon-control" autofocus type="button" aria-label="Close workspace navigation" (click)="menuCloser.requestClose()"><app-icon name="close"/></button></div>
+ <ng-container [ngTemplateOutlet]="links"/>
+</dialog>
+<ng-template #links>
+ <nav aria-label="Admin navigation" (click)="closeOnNavigation($event)">
+  <details open><summary>Overview <app-icon name="chevron-down"/></summary><a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" ariaCurrentWhenActive="page"><app-icon name="grid"/><span>Dashboard</span></a></details>
+  <details open><summary>Management <app-icon name="chevron-down"/></summary><a routerLink="/admin/accounts" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="user"/><span>Accounts</span></a>@if(isAdmin()){<a routerLink="/admin/catalog-filters" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="filter"/><span>Catalog Filters</span></a>}</details>
+  <details open><summary>Moderation <app-icon name="chevron-down"/></summary>
+   <a routerLink="/admin/conversations" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="comment"/><span>Conversation Moderation</span></a>
+   <a routerLink="/admin/feed-reports" routerLinkActive="active"><app-icon name="flag"/>Feed Reports</a><a routerLink="/admin/content" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="cube"/><span>Content Moderation</span></a>
+   <a routerLink="/admin/account-moderation" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="block"/><span>Account Moderation</span></a>
+   @if(isAdmin()){<a routerLink="/admin/appeals" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="reply"/><span>Appeals</span></a>}
+   <a routerLink="/admin/removed" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="restore"/><span>Removed Content</span></a>
+  </details>
+  <details open><summary>System <app-icon name="chevron-down"/></summary>
+   @if(isAdmin()){<a routerLink="/admin/storage-quotas" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="cube"/><span>Storage Limits</span></a>}
+   @if(isAdmin()){<a routerLink="/admin/verification" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="success"/><span>Creator Verification</span></a>}
+   <a routerLink="/admin/audit" routerLinkActive="active" ariaCurrentWhenActive="page"><app-icon name="filter"/><span>Audit Log</span></a>
+  </details>
+ </nav>
+</ng-template>

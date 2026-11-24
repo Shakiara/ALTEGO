@@ -1,0 +1,11 @@
+// ALTEGO necesita aplicar opciones de compilación coherentes al código TypeScript.
+// Esta configuración JSONC establece la validación de tipos y las reglas comunes de generación.
+{
+  "compilerOptions": {
+    "strict": true, "skipLibCheck": true, "isolatedModules": true,
+    "experimentalDecorators": true, "importHelpers": true,
+    "target": "ES2022", "module": "preserve", "moduleResolution": "bundler",
+    "lib": ["ES2022", "dom"]
+  },
+  "angularCompilerOptions": { "strictTemplates": true, "strictInjectionParameters": true }
+}

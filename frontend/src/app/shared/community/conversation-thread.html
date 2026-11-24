@@ -1,0 +1,83 @@
+<!-- ALTEGO necesita mostrar los comentarios y respuestas de una conversación. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+<section id="conversation-comments" class="comment-thread" aria-labelledby="conversation-comments-title">
+  <header class="thread-heading">
+    <h2 id="conversation-comments-title" tabindex="-1">Comments</h2>
+    <select appField aria-label="Sort comments" [value]="order()" (change)="changeOrder($any($event.target).value)">
+      <option value="oldest">Oldest First</option><option value="newest">Newest First</option><option value="popular">Most Popular</option>
+    </select>
+  </header>
+  @if(auth.user()){
+    <app-comment-composer [(body)]="draft" [busy]="working()==='new'" (submitted)="create($event,null)"/>
+  }@else{
+    <a routerLink="/login" [queryParams]="{returnUrl:router.url}">Log in to comment</a>
+  }
+  @if(loading()&&!comments().length){<p role="status">Loading comments…</p>}
+  @if(error()){<p role="alert">{{error()}} <button appButton type="button" (click)="retry()">Retry</button></p>}
+  @if(!loading()&&!error()&&!visibleRoots().length){<p>No comments yet.</p>}
+  @for(comment of visibleRoots();track comment.id){
+    <div class="comment-group">
+      <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{$implicit:comment}"/>
+      @if(repliesFor(comment).items.length){
+        <div class="comment-replies" aria-label="Replies">
+          @for(reply of repliesFor(comment).items;track reply.id){
+            <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{$implicit:reply}"/>
+          }
+        </div>
+      }
+      @if(repliesFor(comment).next_cursor || repliesFor(comment).items.length<comment.reply_count){
+        <button appButton type="button" class="more-replies" [disabled]="replyLoading()===comment.id" (click)="moreReplies(comment)">
+          {{replyLoading()===comment.id?'Loading…':'View More Replies'}}
+        </button>
+      }
+    </div>
+  }
+  @if(cursor()){
+    <button appButton type="button" [disabled]="loading()" (click)="load(true)">{{loading()?'Loading…':'Load More Comments'}}</button>
+  }
+</section>
+
+<ng-template #row let-comment>
+  <article class="comment-row" [id]="'comment-'+comment.id" [class.comment-highlight]="highlight()===comment.id" tabindex="-1">
+    <a class="comment-avatar" [routerLink]="['/creators',comment.author.id]" [attr.aria-label]="'View '+comment.author.display_name+' profile'">
+      <app-live-avatar [userId]="comment.author.id" [src]="avatar(comment.author.avatar_url)" [label]="comment.author.display_name"/>
+    </a>
+    <div class="comment-main">
+      <header class="comment-heading">
+        <a [routerLink]="['/creators',comment.author.id]"><strong>{{comment.author.display_name}} <app-account-badges [creatorId]="comment.author.id" [verified]="comment.author.verified_creator ?? false"/></strong></a>
+        <time class="comment-time" tabindex="0" [attr.datetime]="comment.created_at" [attr.data-full-date]="comment.created_at | date:'full'"
+          [attr.aria-label]="comment.created_at | date:'full'">{{when(comment.created_at)}}</time>
+        <div class="comment-manage">
+          @if(auth.user()?.id===comment.author.id){
+            <button type="button" aria-label="Edit comment" title="Edit comment" (click)="edit(comment)"><app-icon name="edit"/></button>
+          }
+          @if(mayReport() && auth.user() && auth.user()?.id!==comment.author.id){
+            <button type="button" aria-label="Report" title="Report" (click)="reportRequested.emit(comment.id)"><app-icon name="flag"/></button>
+          }
+          @if(mayDelete(comment)){
+            <button type="button" aria-label="Delete comment" title="Delete comment" (click)="remove(comment)"><app-icon name="trash"/></button>
+          }
+        </div>
+      </header>
+      @if(comment.reply_to;as target){
+        <button type="button" class="reply-context" (click)="jump(target.id)">Replying to {{target.username}}</button>
+      }
+      @if(editing()===comment.id){
+        <app-comment-composer [(body)]="editDraft" label="Edit comment" submitLabel="Save" [expanded]="true"
+          [busy]="working()===comment.id" (submitted)="save(comment,$event)" (canceled)="editing.set(null)"/>
+      }@else{
+        <app-comment-text [comment]="comment"/>
+      }
+      <app-social-reactions [creatorId]="creatorId()" [postId]="postId()" [commentId]="comment.id" [summary]="comment.reactions"
+        (updated)="updateReaction(comment,$event)">
+        @if(auth.user()){
+          <button type="button" class="reply-button" aria-label="Reply" title="Reply" (click)="reply(comment)"><app-icon name="reply"/></button>
+        }
+      </app-social-reactions>
+      @if(replying()===comment.id){
+        <app-comment-composer [(body)]="replyDraft" label="Write a reply…" [expanded]="true"
+          [busy]="working()==='reply'" (submitted)="create($event,comment)" (canceled)="replying.set(null)"/>
+      }
+    </div>
+  </article>
+</ng-template>

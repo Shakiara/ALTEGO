@@ -1,0 +1,6 @@
+// ALTEGO necesita resolver los nombres públicos de las cuentas.
+// Este módulo reúne las operaciones y estructuras que atienden esa responsabilidad.
+const fail=(status,code,message)=>Object.assign(Error(message),{status,code});
+export function validateDisplayName(value){if(typeof value!=='string'||![...value.trim()].length||[...value.trim()].length>30||/[\u0000-\u001f\u007f<>]/.test(value))throw fail(400,'INVALID_DISPLAY_NAME','Display Name must contain 1–30 characters.');return value.trim();}
+
+export async function changeDisplayName(sql,userId,value){const name=validateDisplayName(value);const [[settings]]=await sql.execute('SELECT display_name_changed_at,display_name_changed_at IS NULL OR UTC_TIMESTAMP(6)>=DATE_ADD(display_name_changed_at,INTERVAL 168 HOUR) allowed FROM account_settings WHERE user_id=? FOR UPDATE',[userId]);if(!settings)throw fail(503,'ACCOUNT_SETTINGS_NOT_READY','Account settings are unavailable.');const [[profile]]=await sql.execute('SELECT display_name FROM user_profiles WHERE user_id=? FOR UPDATE',[userId]);if(profile?.display_name===name)return false;if(!Number(settings.allowed))throw fail(409,'DISPLAY_NAME_COOLDOWN','You can change your Display Name once every 168 hours.');await sql.execute('UPDATE account_settings SET display_name_changed_at=UTC_TIMESTAMP(6),revision=revision+1 WHERE user_id=?',[userId]);return true;}

@@ -1,0 +1,68 @@
+/* ALTEGO necesita una presentación coherente para los estados de interacción y foco de la interfaz. */
+/* Esta hoja define su distribución y sus estados visuales conforme al diseño de la aplicación. */
+body .shell-header{position:relative;z-index:20;display:flex;justify-content:space-between;gap:16px;padding:22px 36px;overflow:visible;isolation:auto}
+.header-controls{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.icon-control{border:1px solid #fff;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;background:linear-gradient(135deg,#ffffff85,#f3deeb55);color:#80536e;box-shadow:inset 0 1px 3px #fff9,0 4px 16px #916e8a10;transition:background .2s,box-shadow .2s;font-size:22px}
+.icon-control:hover{background:#f4d6e59c;box-shadow:0 0 16px #debad657,inset 0 1px #fff}
+.avatar-control{background:linear-gradient(135deg,#f3d5df,#dbd4ef);font-family:var(--font-display);font-size:22px}
+.avatar-area{position:relative}
+.search-control{display:flex;align-items:center;justify-content:flex-end;border-radius:30px;gap:0;position:relative}
+.search-control.search-open{background:#ffffff65;box-shadow:inset 0 0 0 1px #fff;backdrop-filter:blur(16px)}
+.search-control input{width:clamp(120px,20vw,270px);height:44px;margin:0;background:transparent!important;border:0!important;border-radius:25px!important;animation:search-expand .25s ease-out;min-width:0}
+@keyframes search-expand{from{width:0;opacity:0}to{opacity:1}}
+body .header nav.account-menu{position:absolute;top:calc(100% + 14px);right:0;display:flex;flex-direction:column;align-items:stretch;gap:2px;width:235px;max-width:calc(100vw - 24px);padding:12px;border-radius:24px;background:#faf3f5ed;backdrop-filter:blur(24px) saturate(115%);box-shadow:0 20px 55px #6c426326;animation:surface-in .18s ease-out;z-index:30}
+body .header nav.account-menu a,.account-menu button{padding:12px 16px;min-height:44px;border:0;border-radius:14px;font-size:14px;text-align:left;color:#563d52;background:transparent;white-space:normal;overflow-wrap:anywhere}
+body .header nav.account-menu a:hover,.account-menu button:hover{background:var(--gradient-active)}
+.account-menu hr{width:calc(100% - 24px);border:0;border-top:1px solid #ab839d30;margin:7px auto}
+.menu-identity{padding:12px 16px;display:grid;gap:8px;overflow-wrap:anywhere}.menu-identity strong{font-weight:500}
+body dialog.glass-panel.ui-modal{border:1px solid #fff;background:#faf2f5e8;backdrop-filter:blur(24px);border-radius:28px;box-shadow:0 24px 80px #5c3b6233}
+body dialog.ui-modal::backdrop{background:#483d552b;backdrop-filter:blur(4px)}
+body dialog.glass-panel.bag-drawer{position:fixed;inset:16px 16px 16px auto;margin:0;width:min(410px,calc(100vw - 32px));max-height:calc(100dvh - 32px);height:calc(100dvh - 32px);padding:26px}
+.bag-drawer[open]{display:flex;flex-direction:column;animation:drawer-in .3s ease-out}
+.drawer-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.bag-drawer h2{font-family:var(--font-display);font-size:34px;margin:0 0 10px;color:var(--color-brand);line-height:1.2}.bag-drawer .drawer-heading .eyebrow{margin:0}.bag-drawer .drawer-heading{flex:0 0 auto;margin-bottom:0}.shopping-bag-open{overflow:hidden}body dialog.glass-panel.bag-drawer{overflow:hidden}.bag-drawer>button{flex:0 0 auto;margin-top:10px;min-height:38px;font-size:12px}
+.bag-placeholder{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;padding:25px 5px;line-height:1.7;color:var(--color-muted)}.bag-placeholder app-icon{width:55px;height:55px;margin-bottom:30px}.bag-placeholder h3{color:var(--color-ink);font-family:var(--font-display);font-size:25px}
+.confirmation-dialog[open]{animation:surface-in .2s ease-out}.confirmation-dialog h2{font-family:var(--font-display);font-size:30px;margin:16px 0}.confirmation-dialog p{line-height:1.7}.confirmation-dialog .actions{justify-content:flex-end;margin-top:24px}.dialog-symbol{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#ebd9ee;font-size:27px}.dialog-symbol.warning{background:#f2d8db;color:#944a5c}
+.toast-stack{position:fixed;right:22px;bottom:22px;z-index:100;display:flex;flex-direction:column;gap:10px;width:min(390px,calc(100vw - 32px));pointer-events:none}
+body .toast.glass-panel{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:20px;background:#f5eff8ed;pointer-events:auto;animation:surface-in .2s ease-out;box-shadow:0 10px 35px #654f6522}.toast p{margin:0;font-size:13px;line-height:1.5;overflow-wrap:anywhere;flex:1}.toast .icon-control{width:32px;height:32px;min-width:32px;background:transparent;border-color:transparent;font-size:20px}.toast-symbol{font-size:20px}.toast-success .toast-symbol{color:#387754}.toast-error .toast-symbol{color:#a43e50}body .toast.toast-success{background:#e9f4eeed;border-color:#c3e3d1}body .toast.toast-error{background:#fae9eeed;border-color:#edc0cb}.toast-closing{opacity:0;transform:translateY(12px);transition:opacity .2s,transform .2s}
+.card-favorite{position:absolute;right:12px;top:12px;z-index:3}.favorite-control{width:38px;height:38px;min-width:38px;background:#fff5}
+body .product-card .product-art app-model{padding:32px 9px 8px}body .product-card .product-title{font-size:16px;font-weight:500;line-height:1.45}body .product-card .price{font-size:24px;font-weight:500;letter-spacing:-.7px}.creator-link{display:inline-block;font-size:12px;color:#76546d;margin:3px 0 9px;overflow-wrap:anywhere}.creator-link:hover{text-decoration:underline}.card-swatches{gap:3px;margin:8px -5px 2px}
+body .card-swatches button{width:30px;height:30px;min-width:30px;box-shadow:none;border:6px solid transparent;background-clip:padding-box;outline-offset:0}body .card-swatches button[aria-pressed=true]{outline-width:1px}body .swatches button{transition:box-shadow .2s;flex-shrink:0}.swatches button:hover{box-shadow:0 0 0 2px #af7f9e50}
+.detail-copy{position:relative}.detail-copy h1{padding-right:20px;overflow-wrap:anywhere}.detail-favorite{position:absolute;top:20px;right:20px}.detail-copy .eyebrow{padding-right:36px;line-height:1.5}body .detail-price{font-size:36px}.detail-copy .swatches button{width:36px;height:36px}
+.access-state{max-width:540px;padding:44px 30px;margin:70px auto;text-align:center;line-height:1.7}.access-state app-icon{width:46px;height:46px;color:var(--color-brand)}.access-state h1{font-family:var(--font-display);font-size:36px;color:var(--color-brand);line-height:1.2;margin:20px 0}.access-state .button{margin-top:14px}
+.creator-heading{display:flex;align-items:center;gap:24px;padding:30px;margin:30px 0}.creator-heading h1{font-family:var(--font-display);font-size:40px;margin:10px 0;color:var(--color-brand);overflow-wrap:anywhere}.creator-heading>div{min-width:0}.creator-heading p{margin:0}.profile-avatar{display:grid;place-items:center;width:90px;height:90px;flex-shrink:0;background:var(--gradient-active);border:1px solid white;border-radius:50%;font-family:var(--font-display);font-size:42px;color:var(--color-brand)}.profile-title{font-family:var(--font-display);font-size:30px}
+@keyframes surface-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes drawer-in{from{opacity:0;transform:translateX(35px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:800px){body .shell-header{padding:18px 22px}.header-controls{gap:8px}.search-control input{width:180px}body .detail-grid{gap:24px}}
+@media(max-width:520px){body .shell-header{padding:16px 14px;gap:6px}.shell-header .brand-word{font-size:28px}.shell-header .brand-caption{font-size:6px;letter-spacing:1px}.header-controls{gap:5px}.header-controls>.icon-control,.avatar-control,.search-control>.icon-control{width:40px;height:40px;min-width:40px}.search-control.search-open{position:absolute;left:12px;right:103px;z-index:2;background:#faf2f7f5}.search-control input{width:100%;flex:1;height:40px}.toast-stack{right:16px;bottom:16px}body dialog.glass-panel.ui-modal{padding:22px}.access-state{padding:30px 20px;margin:35px auto}.access-state h1{font-size:30px}.creator-heading{gap:16px;padding:22px}.profile-avatar{width:60px;height:60px;font-size:30px}.creator-heading h1{font-size:30px}.studio-preview app-model{height:270px}.detail-art{height:340px}.detail-copy h1{font-size:34px}body main{padding-left:14px;padding-right:14px}}
+@media(prefers-reduced-motion:reduce){.account-menu,.search-control input,.bag-drawer[open],.confirmation-dialog[open],.toast{animation:none!important}.icon-control,.toast-closing,.swatches button{transition:none!important}}
+@supports not (backdrop-filter:blur(1px)){body .toast,body dialog.ui-modal,body .header nav.account-menu{background:#faf3f7}}
+
+
+body{min-width:0}
+
+
+body dialog.glass-panel.confirmation-dialog{position:fixed;inset:0;margin:auto;overflow-x:hidden}
+body dialog.confirmation-dialog .actions>*{min-width:0}
+
+
+body dialog.glass-panel.ui-modal::before{inset:0}
+.confirmation-dialog .actions button{border-radius:16px;padding:10px 20px;border-width:1px}
+
+body .header nav.account-menu{max-height:calc(100dvh - 110px);overflow:auto}
+body .header nav.account-menu::before{inset:0}
+
+
+.back-link app-icon{width:12px;height:12px;margin-right:5px}.detail-actions app-icon,.review-form button app-icon{width:12px;height:12px;margin-left:5px}.stars{display:inline-flex;align-items:center;gap:2px}.stars app-icon{width:12px;height:12px}.generic-avatar app-icon{width:17px;height:17px}.model-empty .model-empty-icon{width:44px;height:44px;color:var(--color-muted)}.toast-symbol app-icon{width:20px;height:20px}.dialog-symbol app-icon{width:22px;height:22px}.toast .icon-control app-icon{width:15px;height:15px}
+
+
+app-icon>fa-icon>svg.svg-inline--fa{display:block;width:100%;height:100%;vertical-align:0;overflow:visible}
+
+@media(max-width:650px){
+  .shell-header:has(app-notification-center) .search-control.search-open{
+    position:absolute;inset-inline:12px 149px;z-index:2
+  }
+  .shell-header:has(app-notification-center) .search-control.search-open input{width:100%;flex:1}
+}
+@media(max-width:350px){
+  body .shell-header:has(app-notification-center){padding-inline:10px;gap:4px}
+  .shell-header:has(app-notification-center) .header-controls{gap:4px}
+}

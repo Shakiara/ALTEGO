@@ -1,0 +1,29 @@
+<!-- ALTEGO necesita mostrar las tablas compartidas de los espacios de gestión. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+@if(loading()){
+ <div class="table-loading"><span role="status">Loading {{itemLabel()}}…</span><div aria-hidden="true" class="skeleton-rows">@for(row of [1,2,3,4];track row){<div><i></i><i></i><i></i></div>}</div></div>
+}@else if(!rows().length){
+ <div class="table-empty" role="status"><span class="empty-icon"><app-icon name="search"/></span><strong>No {{itemLabel()}} match the current filters.</strong></div>
+}@else{
+ <table [attr.aria-label]="tableLabel()">
+  <thead><tr>@if(selectionEnabled()){<th scope="col" class="selection-cell">Select</th>}@for(column of columns();track column.key){<th scope="col">{{column.label}}</th>}<th scope="col" class="action-heading">Details</th></tr></thead>
+  <tbody>@for(row of rows();track row.id){
+   <tr>@if(selectionEnabled()){<td class="selection-cell"><input type="checkbox" [attr.aria-label]="'Select record '+row.id" [checked]="selectionIds().has(row.id)" [disabled]="!row.selectable" (change)="selectionChanged.emit({id:row.id,selected:$any($event.target).checked})">@if(!row.selectable){<small>Protected</small>}</td>}@for(column of columns();track column.key){
+    <td [attr.data-kind]="column.kind||'text'"><span class="mobile-label" aria-hidden="true">{{column.label}}</span>
+     @switch(column.kind){
+      @case('identity'){<span class="account-identity"><span class="account-avatar" aria-hidden="true">{{row.values[column.key].slice(1,2).toUpperCase()}}</span>@if(row.profileIds?.[column.key]){<a [routerLink]="['/creators',row.profileIds![column.key]]"><strong>{{row.values[column.key]}}</strong></a>}@else{<strong>{{row.values[column.key]}}</strong>}</span>}
+      @case('badge'){<span class="value-badge" [attr.data-tone]="row.tones?.[column.key]">@if(column.key==='status'){<span class="status-dot" aria-hidden="true"></span>}{{row.values[column.key]}}</span>}
+      @case('verification'){<span class="verification-value" [attr.data-tone]="row.tones?.[column.key]">@if(row.tones?.[column.key]==='verified'){<app-verified-creator-badge [verified]="true"/>}@else{<app-icon name="unknown"/>}{{row.values[column.key]}}</span>}
+      @default{<span class="text-value">@if(row.profileIds?.[column.key]){<a [routerLink]="['/creators',row.profileIds![column.key]]">{{row.values[column.key]}}</a>}@else{ {{row.values[column.key]}} }</span>}
+     }
+    </td>}
+    <td class="row-action"><button appButton type="button" [attr.aria-label]="actionLabel()+' '+row.values['username']" (click)="selected.emit(row.id)">View <app-icon name="arrow-right"/></button></td>
+   </tr>
+  }</tbody>
+ </table>
+}
+@if(total()>0){
+ <nav [attr.aria-label]="tableLabel()+' pages'"><span class="page-summary" aria-live="polite">Page {{page()}} of {{pages()}} @if(showTotal()){<span aria-hidden="true">·</span> {{total()}} {{itemLabel()}}}</span>
+ <div><button appButton type="button" [disabled]="loading()||page()<=1" (click)="changed.emit(page()-1)"><app-icon name="chevron-left"/> Previous</button>
+ <button appButton type="button" [disabled]="loading()||page()>=pages()" (click)="changed.emit(page()+1)">Next <app-icon name="chevron-right"/></button></div></nav>
+}

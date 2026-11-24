@@ -1,0 +1,34 @@
+<!-- ALTEGO necesita mostrar el resumen del espacio administrativo. -->
+<!-- Esta plantilla organiza los contenidos y controles de esa vista mediante los enlaces de Angular. -->
+<section class="overview" [attr.aria-busy]="loading()">
+ <header class="overview-heading"><h2>Account overview</h2></header>
+ @if(loading()){<div appGlass class="overview-state" role="status"><app-icon name="grid"/><p>Loading workspace…</p></div>}
+ @if(error()){<div appGlass class="overview-state"><app-icon name="warning"/><p class="notice error" role="alert">{{error()}}</p><button appButton type="button" (click)="load()">Try Again</button></div>}
+ @if(counts();as data){
+ <dl class="metric-grid">
+  <div appGlass class="metric metric-rose"><span class="metric-icon"><app-icon name="user"/></span><dt>Total Accounts</dt><dd>{{data.accounts}}</dd></div>
+  <div appGlass class="metric metric-lavender"><span class="metric-icon"><app-icon name="lock"/></span><dt>Moderators</dt><dd>{{data.moderators}}</dd></div>
+  <div appGlass class="metric metric-peach"><span class="metric-icon"><app-icon name="block"/></span><dt>Active Suspensions</dt><dd>{{data.suspended}}</dd></div>
+  <div appGlass class="metric metric-blue"><span class="metric-icon"><app-icon name="warning"/></span><dt>Warnings Issued</dt><dd>{{data.warnings}}</dd></div>
+ </dl>
+ }
+ <div class="overview-panels">
+  <section appGlass class="quick-panel">
+   <header class="panel-heading"><span class="panel-heading-icon"><app-icon name="grid"/></span><h2>Quick Access</h2></header>
+   <div class="quick-links">
+    <a routerLink="/admin/accounts"><span class="quick-icon"><app-icon name="user"/></span><span class="quick-copy"><strong>Accounts</strong></span><app-icon class="quick-arrow" name="arrow-right"/></a>
+      <a routerLink="/admin/conversations"><span class="quick-icon"><app-icon name="flag"/></span><span class="quick-copy"><strong>Conversation Moderation</strong></span><app-icon class="quick-arrow" name="arrow-right"/></a>
+   @if(auth.user()?.role==='admin'){
+     <a routerLink="/admin/verification"><span class="quick-icon"><app-icon name="success"/></span><span class="quick-copy"><strong>Creator Verification</strong></span><app-icon class="quick-arrow" name="arrow-right"/></a>
+    }
+   </div>
+  </section>
+  @if(counts();as data){
+   <section appGlass class="status-panel">
+    <header class="panel-heading"><span class="panel-heading-icon"><app-icon name="success"/></span><h2>Account status</h2></header>
+    <div class="status-chart" [style.--active-share]="data.accounts?((data.accounts-data.suspended)/data.accounts*100)+'%':'0%'"><div><strong>{{data.accounts-data.suspended}}</strong><span>Active accounts</span></div></div>
+    <dl class="status-legend"><div><dt><span class="legend-dot active-dot"></span>Active</dt><dd>{{data.accounts-data.suspended}}</dd></div><div><dt><span class="legend-dot suspended-dot"></span>Suspended</dt><dd>{{data.suspended}}</dd></div></dl>
+   </section>
+  }
+ </div>
+</section>
